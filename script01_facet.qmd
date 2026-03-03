@@ -1,0 +1,183 @@
+---
+title: "Analyse des commentaires Airbnb : extraction des facettes"
+author: "Christophe Benavent"
+date: today
+institute: "Université Dauphine - PSL / DRM / ACSS-PSAI" 
+format: 
+  beamer: 
+    aspectratio: 43
+    navigation: horizontal
+    theme: CambridgeUS
+    colortheme: beaver
+    fig-pos: 'center'
+    fig-width: 10
+    fig-height: 7
+    incremental: true 
+execute:
+  echo: false
+  warning: false
+  error: false
+editor: visual
+bibliography: references.bib
+---
+
+# General Data
+
+In this task, we first analyze the detection of aspects that emerge in consumer reviews.
+
+We then examine their relationship with the overall sentiment, as measured by two instruments.
+
+```{r}
+
+library(tidyverse)
+library(readr)
+library(cld3)
+library(ggwordcloud)
+
+sentiment_analysis_results <- read_csv("sentiment_analysis_results.csv")
+
+
+```
+
+------------------------------------------------------------------------
+
+# Aspects extraction
+
+text = text\[:1000\]
+
+prompt = f"""Extract the main aspects (topics/themes) mentioned in this Airbnb review. Return only a comma-separated list of 3-7 key aspects. Be concise and specific. Examples of aspects: cleanliness, location, communication, amenities, noise, comfort, value, host responsiveness, wifi, kitchen, bed quality, etc."""
+
+-   cpu- gemma3:4b - sample 1000 - 1h 20 - 5.11s/item
+
+-   gpu h100 - Mistral32b ? - - - s/item
+
+code python :
+
+------------------------------------------------------------------------
+
+## Aspects
+
+A few general aspects and a bunch of more specific ones.
+
+```{r}
+
+df <- read_csv("aspect_extraction_results.csv") 
+  
+df_separe <- df %>%
+  separate(
+    col = Aspects,
+    into = paste0("aspect_", 1:7),
+    sep = ";",
+    fill = "right"
+  ) |>
+  pivot_longer(-c(Review, Aspect_Count), names_to = "col", values_to = "Aspects") |>
+  mutate(Aspects=str_squish(Aspects),
+         Aspects=str_to_sentence(Aspects)
+         )|>
+  filter(!is.na(Aspects))
+
+
+
+foo<-df_separe |>
+  mutate(Aspects=ifelse(grepl("Host", Aspects),"Host", Aspects),
+         Aspects=ifelse(grepl("Family", Aspects),"Family", Aspects),
+         Aspects=ifelse(grepl("Neighborhood", Aspects),"Neighborhood", Aspects),
+         Aspects=ifelse(grepl("Local", Aspects),"Local", Aspects),
+         Aspects=ifelse(grepl("Apartment", Aspects),"Apartment", Aspects)) |> # to be improved...
+  group_by(Aspects)|>
+  summarise(n=n()) |>
+  mutate(n=as.numeric(n))|>
+  arrange(desc(n)) |>
+  mutate(sum=cumsum(n)) |>
+  filter(n>4)
+
+set.seed(42)
+ggplot(foo, aes(label = Aspects, size = log(n), color= log(n))) +
+  geom_text_wordcloud() +
+  scale_size_area(max_size = 10) +
+  scale_color_gradient(low = "firebrick2", high = "green4") +  # Dégradé de vert
+  theme_minimal()+labs(caption="Size are log proportionnal to frequencies >5 ")
+
+
+```
+
+## excercise
+
+A worcloud where relative postion of labels reflect their correlations.
+
+compute de distance matrix, project in 2D with tsne or umap.
+
+## 
+
+```{r}
+
+foo1<-df_separe |>
+  left_join(foo) |>
+  filter(n>20) |>
+  select(-col, -Aspect_Count, -n, -sum)|>
+  mutate(k=1)|>
+  pivot_wider(id_cols = "Review", names_from = "Aspects", values_from ="k") |>
+    mutate(across(where(is.numeric), ~ replace_na(., 0)))
+
+
+
+df1 <- df |>
+  left_join(foo1)
+
+df2 <- cbind(df1,sentiment_analysis_results)
+```
+
+------------------------------------------------------------------------
+
+## Sentiment
+
+On examine la convergence de deux modèles de sentiment bertsementiment et ??
+
+------------------------------------------------------------------------
+
+```{r}
+
+ggplot(df2, aes(y=sentiment_score, x = sentiment))+
+  geom_violin(aes(fill=sentiment), alpha=.3)+
+  scale_fill_ordinal() +
+  # Ajouter les points des moyennes
+  stat_summary(
+    fun = mean,          # Calcule la moyenne
+    geom = "point",     # Affiche un point
+    shape = 18,         # Forme du point (18 = losange)
+    size = 4,           # Taille du point
+    color = "firebrick",      # Couleur des points
+    fill = "firebrick"        # Remplissage des points
+  ) +
+  # Ajouter une ligne connectant les moyennes
+  stat_summary(
+    fun = mean,          # Calcule la moyenne
+    geom = "line",       # Trace une ligne
+    group = 1,          # Connecte tous les points
+    color = "firebrick",       # Couleur de la ligne
+    linewidth = 0.8     # Épaisseur de la ligne
+  ) +
+  # Améliorer la lisibilité
+  labs(
+    title = "Distribution des scores de sentiment par catégorie",
+    x = "Sentiment",
+    y = "Score de sentiment"
+  )
+
+
+```
+
+---
+
+## Do  Facets Explain Sentiment?
+
+
+```{r}
+
+fit<-lm(sentiment_score ~nwords+ Aspect_Count+ langue_short+Comfort+Noise+Location+Quietness+Cleanliness, df2)
+
+summary(fit)
+
+```
+
+## References

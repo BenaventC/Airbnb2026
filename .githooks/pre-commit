@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+# Block commits containing staged files larger than 500 KiB
+max_bytes=$((500 * 1024))
+failed=0
+
+while IFS= read -r file; do
+  if [ -f "$file" ]; then
+    size=$(wc -c <"$file" | tr -d '[:space:]')
+    if [ "$size" -gt "$max_bytes" ]; then
+      echo "ERROR: '$file' is ${size} bytes (> ${max_bytes} bytes)"
+      failed=1
+    fi
+  fi
+done < <(git diff --cached --name-only --diff-filter=AM)
+
+if [ "$failed" -ne 0 ]; then
+  echo ""
+  echo "Commit blocked: remove large files, use external storage, or Git LFS."
+  exit 1
+fi
+
+exit 0

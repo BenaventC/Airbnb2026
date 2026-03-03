@@ -1,0 +1,160 @@
+---
+title: "Analyse des commentaires Airbnb : extraction des facettes"
+author: "Christophe Benavent"
+date: today
+institute: "Université Dauphine - PSL / DRM / ACSS-PSAI" 
+format: 
+  beamer: 
+    aspectratio: 43
+    navigation: horizontal
+    theme: CambridgeUS
+    colortheme: beaver
+    fig-pos: 'center'
+    fig-width: 10
+    fig-height: 7
+    incremental: true 
+execute:
+  echo: false
+  warning: false
+  error: false
+editor: visual
+bibliography: references.bib
+---
+
+# Données générales
+
+Une tâche difficile et essentielle : identifier dans un texte des arguments, et la valeur qui s'y associe : d'abord un aspect et un sentiment - positif négatif), en sciences politique un argument et une position ( pour ou contre), en sciences des hypothèses varies ou fausses, en littérature des images belles ou laides. Associer un objet et un qualificatif. Telle est la tâche générique.
+
+```{r}
+
+library(tidyverse)
+library(readr)
+library(flextable)
+library(cld3)
+library(ggwordcloud)
+
+```
+
+------------------------------------------------------------------------
+
+# Aspects extraction
+
+\tiny
+
+def extract_aspects(text, max_retries=3):
+
+```         
+"""
+Extract main aspects from a review using Gemma3 via Ollama
+
+Args:
+    text: The review text
+    max_retries: Number of retries if the request fails
+    
+Returns:
+    List of aspects as strings
+"""
+text = text[:1000]
+
+prompt = f"""Extract the main aspects (topics/themes) mentioned in this Airbnb review. Return only a comma-separated list of 3-7 key aspects. Be concise and specific. Examples of aspects: cleanliness, location, communication, amenities, noise, comfort, value, host responsiveness, wifi, kitchen, bed quality, etc.
+```
+
+Review: "{text}"
+
+\normalsize
+
+test with
+
+-   cpu- gemma3:4b - sample 1000 - 1h 20 - 5.11s/item
+
+-   gpu h100 - Mistral32b ? - - - s/item
+
+------------------------------------------------------------------------
+
+## Les aspects identifiés (échelle log (n))
+
+```{r}
+
+sentiment_analysis_results <- read_csv("sentiment_analysis_results.csv")
+
+df <- read_csv("absa_results.csv") 
+  
+df_separe <- df %>%
+  separate(
+    col = Aspects_and_Sentiments,
+    into = paste0("Aspects_and_Sentiments", 1:8),
+    sep = "\\s*\\|\\s*"
+  ) |>
+  pivot_longer(-c(Review, Aspect_Count), names_to = "col", values_to = "Aspects") |>
+  mutate(Aspects=str_squish(Aspects),
+         Aspects=str_to_sentence(Aspects)
+         )|># Extraction des valeurs entre parenthèses dans une nouvelle colonne
+  mutate(
+    Score = str_extract(Aspects, "\\(([^)]+)\\)") %>%  # Extrait "(0.6)"
+      str_remove_all("\\(|\\)") %>%                  # Supprime les parenthèses
+      as.numeric()                                   # Convertit en numérique
+  ) %>%
+  # Nettoyage de la colonne Aspects (suppression des valeurs entre parenthèses)
+  mutate(
+    Aspects = str_remove_all(Aspects, "\\s*\\([^)]*\\)") %>%  # Supprime "(0.6)"
+      str_squish()                                           # Nettoie les espaces résiduels
+  ) %>%
+  # Filtrage des NA
+  filter(!is.na(Aspects))
+
+
+
+foo<- df_separe |>
+  group_by(Aspects)|>
+  summarise(n=n(),
+            mean=mean(Score, na.rm=TRUE),
+            sd=sd(Score, na.rm=TRUE)) |>
+  mutate(n=as.numeric(n))|>
+  arrange(desc(n)) |>
+  mutate(sum=cumsum(n)) |>
+  filter(n>5)
+
+set.seed(42)
+ggplot(foo, aes(label = Aspects, size = log(n), color= mean, alpha=-sd)) +
+  geom_text_wordcloud() +
+  scale_size_area(max_size = 10) +
+  scale_color_gradient2(low = "orange", mid="lightblue" ,high = "darkgreen") +  # Dégradé de vert
+  theme_minimal()
+
+
+```
+
+---
+
+
+```{r}
+
+ggplot(foo, aes(label = Aspects, size=n)) +
+  geom_text(aes(x = n, y=mean, size=sd))+
+  labs(y="sentiment",
+       x=" Facette par ordre de fréquence")+
+  scale_color_gradient2(low = "orange", mid="lightblue" ,high = "darkgreen") +  # Dégradé de vert
+  theme_minimal()
+
+
+```
+
+## and genral sentiment
+
+
+
+```{r}
+
+df<-cbind(sentiment_analysis_results,df)
+
+```
+
+## Exercise
+
+A worcloud where relative postion of labels reflect their correlations.
+
+compute de distance matrix, project in 2D with tsne or umap.
+
+------------------------------------------------------------------------
+
+# References

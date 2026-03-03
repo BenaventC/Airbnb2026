@@ -1,0 +1,319 @@
+---
+title: "Airbnb quantitative analysis "
+author: "Christophe Benavent"
+date: today
+institute: "Université Dauphine - PSL / DRM / ACSS-PSAI" 
+format: 
+  beamer: 
+    aspectratio: 43
+    navigation: horizontal
+    theme: CambridgeUS
+    colortheme: beaver
+    fig-pos: 'center'
+    fig-width: 9
+    fig-height: 6
+    incremental: true 
+execute:
+  echo: false
+  warning: false
+  error: false
+editor: visual
+bibliography: references.bib
+---
+
+```{r}
+
+library(tidyverse)
+library(readr)
+library(kableExtra)
+library(cld3)
+# Load the treemap library for visualization
+library(treemapify)
+library(treemap)
+
+```
+
+------------------------------------------------------------------------
+
+# Data structure
+
+Hosts(t) \<- listings (t) -\> reviews -\> Guest
+
+# Listings and hosts
+
+Un hôte peut détenir plusieurs logements. Les amateurs et les pros. Quelle concentration ?
+
+```{r}
+
+listings <- read_csv("./data/listings.csv")
+
+hosts<- listings |>
+  group_by(host_id) |>
+  summarise(n=n()) |>
+  mutate(nb_logm=ifelse(n==1,"1",
+                       ifelse(n==2 | n==3 ,"2-3",
+                              ifelse(n>3 & n<11,"4-10",
+                                            ifelse(n>10 & n<50, "11-50", ">50")))),
+         nb_logm = factor(nb_logm, levels = c("1", "2-3", "4-10", "11-50", ">50"), ordered = TRUE))
+
+
+```
+
+\tiny
+
+```{r}
+
+foo <- hosts %>%
+  group_by(nb_logm) %>%
+  summarise(
+    m = n(),
+    sum = sum(n),
+    .groups = "drop"  # Évite un message d'avertissement sur les groupes
+  ) %>%
+  mutate(
+    m_pct = 100*round(m / sum(m), 3),
+    m_sum = 100*round(sum / sum(sum), 3)
+  )
+
+foo %>%
+  kable(
+    format = "latex",
+    caption = "Distribution des offres par nombre d'offres gérées",
+    col.names = c(
+      "Nombre de Logements gérés par hôte",
+      "Nombre d'hôtes",
+      "Nombre de logements",
+      "Hôtes %",
+      "Logement % "
+    ),
+    align = "r",  # Alignement centré pour toutes les colonnes
+    digits = 1 ,   # Pour afficher 3 décimales si nécessaire
+    booktabs = TRUE  # Active le style booktabs (lignes horizontales minimalistes)
+  ) %>%
+  kable_styling(
+    latex_options = c("hold_position"),
+    full_width = TRUE,
+    position = "center"  # Place la légende en bas
+
+  )
+
+ # Sauvegarder le résultat dans un fichier .tex
+ write.csv(
+  foo,
+  file = "tableau_distribution.csv",
+  row.names = FALSE,  # Évite d'écrire les numéros de ligne
+  fileEncoding = "UTF-8"  # Encodage pour éviter les problèmes de caractères spéciaux
+)
+ 
+```
+
+\normalsize
+
+---
+
+## Synthesis
+
+-   96 000 logements proposés à Paris en juin 2024, veille des jeux Olympiques.
+
+-   72 000 hosts
+
+-   530 000 reviews depuis 1 an.
+
+-   230 000 guests
+
+------------------------------------------------------------------------
+
+# Reviews and Guests
+
+-   Reviewers are described only by their surname, we used a small lmm to classify tham as Woman, Man, Couple, or company with an error correction component to improve the qualification.
+-   The reviews are in many languages. The language detection is performed using cld3 (@ojo_divers-bench_2025). We categorize the languages into 7 major groups.(we have to improve the ontology) Here is the representation in the form of a treemap.
+-   
+
+------------------------------------------------------------------------
+
+## Gender
+
+\tiny
+
+```{r}
+
+sentiment_analysis_results <- read_csv("sentiment_analysis_results.csv") |>
+  select(langue, langue_short, sentiment, sentiment_score)
+
+first1000_gender <- read_csv("first1000_gender.csv")
+
+foo<-cbind(first1000_gender,sentiment_analysis_results) |>
+  filter(gender!="Entreprise")
+table(first1000_gender$gender, first1000_gender$confidence_score)
+
+fit<-lm(sentiment_score~gender*langue_short, foo)
+summary(fit)
+library(jtools)
+library(interactions)
+```
+
+\normalsize
+
+------------------------------------------------------------------------
+
+```{r}
+
+effect_plot(fit,pred="gender")
+
+```
+
+------------------------------------------------------------------------
+
+```{r}
+
+effect_plot(fit,pred="langue_short")
+```
+
+------------------------------------------------------------------------
+
+```{r}
+
+cat_plot(fit, pred="langue_short", modx="gender")
+```
+
+------------------------------------------------------------------------
+
+## Langages
+
+```{r}
+
+# Load the reviews dataset and remove HTML line breaks from comments
+reviews <- read_csv("./data/reviews.csv") %>%
+  mutate(comments = str_remove_all(comments, "<br/>"))  # Clean comments by removing  tags
+
+# Filter for reviews after June 13, 2023, and add language and word count features
+reviews <- reviews %>%
+  filter(date > as.Date("2023-06-13")) %>%  # Keep only recent reviews
+  mutate(
+    langue = detect_language(comments),  # Detect language of each comment
+    # Categorize languages into broader groups
+    langue_short = ifelse(langue == "en", "English",
+                         ifelse(langue == "fr", "French",
+                               ifelse(langue %in% c("it", "es", "pt", "ca", "ro"), "Latin",
+                                     ifelse(langue %in% c("de", "nl"), "Germanic", 
+                                            ifelse(langue %in% c("zh", "ja","ko"), "East Asia", "others"))))),
+    nwords = str_count(comments, "\\w+")  # Count words in each comment
+  )
+
+# Save the processed data to a new CSV file
+write.csv(reviews, "./data/reviews_select.csv")
+
+```
+
+
+
+```{r}
+# Calcul de la moyenne et de la médiane
+mean_nwords <- mean(reviews$nwords, na.rm = TRUE)
+median_nwords <- median(reviews$nwords, na.rm = TRUE)
+
+# Création du graphique avec les lignes verticales
+ggplot(reviews, aes(nwords)) +
+  geom_histogram(fill = "orange2", binwidth = 1) +
+  labs(title = "Distribution des avis en fonction de leur longueur en nombre de mots") +
+  # Ligne verticale pour la moyenne
+  geom_vline(
+    aes(xintercept = mean_nwords),
+    color = "pink4",  # Couleur rose-rouge pour la moyenne
+    linetype = "dashed",
+    linewidth = 1
+  ) +
+  # Label pour la moyenne
+  annotate(
+    "text",
+    x = mean_nwords,
+    y = Inf,
+    label = paste0("Moyenne = ", round(mean_nwords, 1)),
+    vjust = 2,
+    hjust = 0.5,
+    color = "pink4"
+  ) +
+  # Ligne verticale pour la médiane
+  geom_vline(
+    aes(xintercept = median_nwords),
+    color = "red3",  # Couleur rouge pour la médiane
+    linetype = "dashed",
+    linewidth = 1
+  ) +
+  # Label pour la médiane
+  annotate(
+    "text",
+    x = median_nwords,
+    y = Inf,
+    label = paste0("Médiane = ", round(median_nwords, 1)),
+    vjust = 1.0,
+    hjust = 0.5,
+    color = "red3"
+  )+
+  labs(x="nombre de mots")+
+  xlim(0,200)
+
+# Sauvegarder le plot en JPEG avec une taille de 27x17 cm
+ggsave(
+  filename = "./Images/distribution_size_reviews.jpg",  # Nom du fichier de sortie
+  plot = last_plot(),                                # Le plot à sauvegarder
+  device = "jpeg",                         # Format JPEG
+  width = 27,                              # Largeur en cm
+  height = 17,                             # Hauteur en cm
+  units = "cm",                            # Unité de mesure
+  dpi = 300                                # Résolution (DPI)
+)
+
+
+```
+
+---
+
+```{r}
+
+# Aggregate data by language group and language: count reviews and average word count
+foo <- reviews %>%
+  group_by(langue_short, langue) %>%
+  summarise(n = n(), nwords = mean(nwords)) |>
+  mutate(n=as.numeric(n)) |>
+  filter(!is.na(langue))
+
+
+ggplot(foo, aes(area = n, fill = nwords, label = langue,
+                subgroup = langue_short)) +
+  geom_treemap() +
+  geom_treemap_subgroup_border() +
+  geom_treemap_subgroup_text(place = "centre", grow = T, alpha = 0.5, colour =
+                             "grey", fontface = "italic", min.size = 0) +
+  geom_treemap_text(colour = "white", place = "topleft", reflow = T)+
+  labs(title="The distribution of reviews by language and word count")+
+  # Inverser le gradient de couleur (rouge-bleu-vert au lieu de vert-bleu-rouge)
+  scale_fill_gradientn(
+    colours = RColorBrewer::brewer.pal(n = 11, name = "RdBu")
+  )
+
+
+  
+# Sauvegarder le plot en JPEG avec une taille de 27x17 cm
+ggsave(
+  filename = "./Images/distribution_language_reviews.jpg",  # Nom du fichier de sortie
+  plot = last_plot(),                                # Le plot à sauvegarder
+  device = "jpeg",                         # Format JPEG
+  width = 27,                              # Largeur en cm
+  height = 17,                             # Hauteur en cm
+  units = "cm",                            # Unité de mesure
+  dpi = 300                                # Résolution (DPI)
+)
+        
+```
+
+```{r}
+```
+
+
+
+## Cross
+
+# References
+
+\tiny
