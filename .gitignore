@@ -43,5 +43,10 @@ Images/
 # Strict research mode: ignore data payloads
 data/**
 
+# Exceptions explicitly requested
+!data/reviews_select.csv
+!data/results_*.csv
+!results_*.csv
+
 # Keep only lightweight/public metadata in data (if needed)
 !data/.gitkeep

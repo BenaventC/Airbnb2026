@@ -5,6 +5,12 @@ max_bytes=$((500 * 1024))
 failed=0
 
 while IFS= read -r file; do
+  case "$file" in
+    data/reviews_select.csv|data/results_*.csv|results_*.csv)
+      continue
+      ;;
+  esac
+
   if [ -f "$file" ]; then
     size=$(wc -c <"$file" | tr -d '[:space:]')
     if [ "$size" -gt "$max_bytes" ]; then
