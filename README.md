@@ -1,42 +1,54 @@
 # Airbnb2026
-Ce repo regroupe des experimentations faites avec les étdudiants du Master AISO au cours d'un enseignement d'application. Des corpus Airbnb font l'objet de l'exploration. Celui de Paris est le modèle, les étudiants étudient d'autres villes. 
 
-On trouvera des scripts en python pour différentes tâches NLP. Les scripts en r/quarto sont consacrés à l'analyse statistiques et à la production de présentation en beamer.  
+This repository contains experiments developed with Master AISO students in an applied teaching context. Airbnb corpora are explored, with Paris used as the reference dataset and extensions to other cities.
 
-## python
+The project includes Python scripts for multiple NLP tasks, as well as R/Quarto scripts for statistical analysis and Beamer presentation generation.
 
--   Annotation syntaxique
--   Detection des genres à partir des prénoms
--   Detection des aspects et sentiments
--   ...
+## Python
 
-## quarto
+- Syntactic annotation: [p01_syntactic_dependency_analysis.ipynb](p01_syntactic_dependency_analysis.ipynb)
+- Gender classification from first names:
+  - [review_gender_classification.ipynb](review_gender_classification.ipynb)
+  - [review_gender_classification2.ipynb](review_gender_classification2.ipynb)
+- Aspect extraction and ABSA:
+  - [aspect_extraction_gemma3.ipynb](aspect_extraction_gemma3.ipynb)
+  - [aspect_probability_gemma3.ipynb](aspect_probability_gemma3.ipynb)
+  - [absa_gemma3.ipynb](absa_gemma3.ipynb)
+  - [absa_neighbourhood_gemma3.ipynb](absa_neighbourhood_gemma3.ipynb)
+- Sentiment analysis: [bert_sentiment_analysis.ipynb](bert_sentiment_analysis.ipynb)
+- Age estimation (experimental):
+  - [extract_age_from_name_ollama.ipynb](extract_age_from_name_ollama.ipynb)
+  - [extract_reviewer_age.ipynb](extract_reviewer_age.ipynb)
 
--   Analyse quanti de Paris
+## Quarto
 
-## workflow git (après chaque modif)
+- Corpus listing/description: [script00_listing.qmd](script00_listing.qmd)
+- Faceted analysis: [script01_facet.qmd](script01_facet.qmd)
+- ABSA (Quarto version): [script02_absa.qmd](script02_absa.qmd)
 
-1) Vérifier les changements
+## Git workflow (after each change)
+
+1) Check changes
 
 ```bash
 git status
 ```
 
-2) Ajouter et commiter
+2) Stage and commit
 
 ```bash
 git add .
-git commit -m "feat|fix|docs|chore: message court"
+git commit -m "feat|fix|docs|chore: short message"
 ```
 
-3) Envoyer sur GitHub
+3) Push to GitHub
 
 ```bash
 git push
 ```
 
-### notes importantes
+### Important notes
 
-- Le hook local bloque les fichiers > 500 Ko (sauf exceptions configurées).
-- Les fichiers `data/reviews_select.csv` et `results_*.csv` sont autorisés selon les règles du projet.
-- Les gros CSV de résultats sont gérés via Git LFS (`.gitattributes`).
+- The local hook blocks files larger than 500 KB (except configured exceptions).
+- Files `data/reviews_select.csv` and `results_*.csv` are allowed by project rules.
+- Large result CSV files are handled through Git LFS (`.gitattributes`).
