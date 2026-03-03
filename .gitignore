@@ -50,3 +50,9 @@ data/**
 
 # Keep only lightweight/public metadata in data (if needed)
 !data/.gitkeep
+
+# Local Git LFS hook artifacts (auto-generated)
+.githooks/post-checkout
+.githooks/post-commit
+.githooks/post-merge
+.githooks/pre-push
