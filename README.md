@@ -7,6 +7,9 @@ The project includes Python scripts for multiple NLP tasks, as well as R/Quarto 
 ## Python
 
 - Syntactic annotation: [p01_syntactic_dependency_analysis.ipynb](p01_syntactic_dependency_analysis.ipynb)
+- Main aspect extraction pipeline (Ollama Gemma 3):
+  - Script: [p02_aspects_gemma3_7b.py](p02_aspects_gemma3_7b.py)
+  - Notebook: [p02_aspects_gemma3_7b.ipynb](p02_aspects_gemma3_7b.ipynb)
 - Gender classification from first names:
   - [review_gender_classification.ipynb](review_gender_classification.ipynb)
   - [review_gender_classification2.ipynb](review_gender_classification2.ipynb)
@@ -68,6 +71,44 @@ print(f"Runtime: {elapsed_sec:.2f} s")
 print(f"Energy: {energy_kwh*1000:.2f} Wh")
 print(f"eCO2: {eco2_g:.2f} gCO2e")
 ```
+
+## Current p02 outputs
+
+The `p02` pipeline currently exports:
+
+- Per-review aspects: [data/results_aspects_gemma3_7b_per_review.csv](data/results_aspects_gemma3_7b_per_review.csv)
+- Raw summary: [data/results_aspects_gemma3_7b_summary.csv](data/results_aspects_gemma3_7b_summary.csv)
+- Normalized summary (synonyms merged): [data/results_aspects_gemma3_7b_summary_normalized.csv](data/results_aspects_gemma3_7b_summary_normalized.csv)
+
+Typical command:
+
+```bash
+python p02_aspects_gemma3_7b.py --sample-size 50 --normalize
+```
+
+Notes:
+- Current model used in `p02`: `gemma3:4b`.
+- `--sample-size` accepts an integer or `total`.
+- The script keeps extraction robust to non-strict JSON model answers.
+
+## Environment
+
+This repository now uses a single Python virtual environment:
+
+- Canonical environment folder: `.venv/`
+- Duplicate folders `.venv-*` are considered deprecated and ignored.
+
+Recommended interpreter path in VS Code:
+
+```text
+${workspaceFolder}\\.venv\\Scripts\\python.exe
+```
+
+## Copilot skill rules
+
+Project-specific coding skill/instructions are stored in:
+
+- [.github/copilot-instructions.md](.github/copilot-instructions.md)
 
 ## Git workflow (after each change)
 
