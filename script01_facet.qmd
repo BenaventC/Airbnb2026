@@ -8,11 +8,22 @@ format:
     aspectratio: 43
     navigation: horizontal
     theme: CambridgeUS
-    colortheme: beaver
+    colortheme: default
     fig-pos: 'center'
     fig-width: 10
     fig-height: 7
     incremental: true 
+header-includes:
+  - |
+    \definecolor{DeepBlue}{RGB}{10,35,92}
+    \definecolor{Bordeaux}{RGB}{125,24,54}
+    \setbeamercolor{structure}{fg=DeepBlue}
+    \setbeamercolor{palette primary}{bg=DeepBlue,fg=white}
+    \setbeamercolor{palette secondary}{bg=Bordeaux,fg=white}
+    \setbeamercolor{palette tertiary}{bg=DeepBlue,fg=white}
+    \setbeamercolor{frametitle}{fg=DeepBlue}
+    \setbeamercolor{title}{fg=Bordeaux}
+    \setbeamercolor{alerted text}{fg=Bordeaux}
 execute:
   echo: false
   warning: false
