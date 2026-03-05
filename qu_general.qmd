@@ -1,0 +1,74 @@
+---
+title: "Untitled"
+format:
+  beamer:
+    aspectratio: 43
+    navigation: horizontal
+    theme: CambridgeUS
+    colortheme: default
+    fig-pos: 'center'
+    fig-width: 10
+    fig-height: 7
+    incremental: true
+header-includes:
+  - |
+    \definecolor{DeepBlue}{RGB}{10,35,92}
+    \definecolor{Bordeaux}{RGB}{125,24,54}
+    \setbeamercolor{structure}{fg=DeepBlue}
+    \setbeamercolor{palette primary}{bg=DeepBlue,fg=white}
+    \setbeamercolor{palette secondary}{bg=Bordeaux,fg=white}
+    \setbeamercolor{palette tertiary}{bg=DeepBlue,fg=white}
+    \setbeamercolor{frametitle}{fg=DeepBlue}
+    \setbeamercolor{title}{fg=Bordeaux}
+    \setbeamercolor{alerted text}{fg=Bordeaux}
+---
+
+# Introduction
+
+Ce projet Airbnb est l'occasion de construire un **catalogue de méthodes** pour l'analyse des données textuelles et structurelles :
+
+- filtrage et préparation de corpus,
+- extraction d'aspects et de sentiments,
+- annotation syntaxique,
+- normalisation et agrégation des résultats,
+- visualisation et restitution (Quarto/Beamer).
+
+L'objectif est de comparer des approches complémentaires dans un cadre reproductible.
+
+# Centralité et nombre de logements Airbnb (Paris, données simulées)
+
+```{r}
+library(tidyverse)
+
+set.seed(2026)
+
+paris_sim <- tibble(
+	arrondissement = 1:20,
+	centralite = pmax(0, 1 - (arrondissement - 1) / 19 + rnorm(20, 0, 0.05))
+) |>
+	mutate(
+		nb_logements = round(350 + 2600 * centralite + rnorm(20, 0, 180)),
+		nb_logements = pmax(nb_logements, 120),
+		arr_label = paste0(arrondissement, "e")
+	)
+
+r_value <- cor(paris_sim$centralite, paris_sim$nb_logements)
+subtitle_txt <- paste0(
+	"Données simulées Paris — corrélation estimée r = ",
+	sprintf("%.2f", r_value)
+)
+
+ggplot(paris_sim, aes(x = centralite, y = nb_logements, label = arr_label)) +
+	geom_point(color = "#7D1836", size = 3, alpha = 0.9) +
+	geom_smooth(method = "lm", se = FALSE, color = "#0A235C", linewidth = 1.1) +
+	geom_text(size = 3.1, color = "#0A235C", vjust = -0.8, check_overlap = TRUE) +
+	labs(
+		title = "Paris (simulé) : centralité de la localisation et volume Airbnb",
+		subtitle = subtitle_txt,
+		x = "Indice de centralité (simulé)",
+		y = "Nombre de logements Airbnb (simulé)",
+		caption = "Lecture: la tendance est positive, les zones plus centrales concentrent plus de logements Airbnb."
+	) +
+	theme_minimal(base_size = 13)
+```
+
