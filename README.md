@@ -18,18 +18,9 @@ The project includes Python scripts for multiple NLP tasks, as well as R/Quarto 
   - Vocabulary filtering (terms appearing in ≥5 documents)
   - Extraction of phi (topic-word) and theta (document-topic) matrices with comment ID preservation
   - Runtime & energy consumption tracking
-- **Output files** (8 languages × 4 file types):
-  - `p02_lda_theta_[LANG].csv` - Document-topic distributions (with comment_id)
-  - `p02_lda_phi_[LANG].csv` - Topic-word distributions
-  - `p02_lda_top_words_[LANG].csv` - Top 10 terms per topic
-  - `p02_lda_dominant_topics_[LANG].csv` - Dominant topic per document
-  - `p02_lda_model_summary.csv` - Model metrics (vocabulary, topics, coherence, perplexity)
-  - `p02_lda_topic_optimization.csv` - Coherence scores for topic number search (3-10)
-  - `p02_lda_pipeline_metrics.csv` - Runtime & energy/carbon metrics
 
 ### p02 (Alternative): Aspect Extraction (Ollama Gemma 3)
-- **Script**: [p02_aspects_gemma3_7b.py](p02_aspects_gemma3_7b.py)
-- **Notebook**: [p02_aspects_gemma3_7b.ipynb](p02_aspects_gemma3_7b.ipynb)
+- [p02_aspects_gemma3_7b.ipynb](p02_aspects_gemma3_7b.ipynb)
 - Gender classification from first names:
   - [review_gender_classification.ipynb](review_gender_classification.ipynb)
   - [review_gender_classification2.ipynb](review_gender_classification2.ipynb)
@@ -42,6 +33,9 @@ The project includes Python scripts for multiple NLP tasks, as well as R/Quarto 
 - Age estimation (experimental):
   - [extract_age_from_name_ollama.ipynb](extract_age_from_name_ollama.ipynb)
   - [extract_reviewer_age.ipynb](extract_reviewer_age.ipynb)
+
+### p05: Aspect Extraction (Ollama Gemma 3)
+- [p05_aspects_gemma3_7b.ipynb](p05_aspects_gemma3_7b.ipynb)
 
 ## Quarto
 
@@ -59,90 +53,11 @@ The project includes Python scripts for multiple NLP tasks, as well as R/Quarto 
 
 ## Project standards (progress and eCO2)
 
-For consistency across all Python scripts and notebooks in this repository:
+For consistency across all Python scripts and notebooks:
 
-1) Progress bars for long tasks
-- Use `tqdm` for any loop expected to run longer than ~30 seconds.
-- Typical cases: document-level annotation, per-row NLP parsing, large exports.
-
-2) eCO2 tracking for each script
-- Each script should track total runtime and report estimated energy + eCO2.
-- Default parameters used in this project:
-  - `POWER_WATTS = 150`
-  - `FR_GRID_KGCO2_PER_KWH = 0.056`
-
-Minimal template:
-
-```python
-import time
-
-POWER_WATTS = 150
-FR_GRID_KGCO2_PER_KWH = 0.056
-SCRIPT_START = time.perf_counter()
-
-# ... script body ...
-
-elapsed_sec = time.perf_counter() - SCRIPT_START
-energy_kwh = (POWER_WATTS / 1000) * (elapsed_sec / 3600)
-eco2_kg = energy_kwh * FR_GRID_KGCO2_PER_KWH
-eco2_g = eco2_kg * 1000
-
-print(f"Runtime: {elapsed_sec:.2f} s")
-print(f"Energy: {energy_kwh*1000:.2f} Wh")
-print(f"eCO2: {eco2_g:.2f} gCO2e")
-```
-
-## Current Pipeline Outputs
-
-### p02_lda_topic_modeling.ipynb
-The LDA topic modeling pipeline exports multilingual topic models:
-
-- **Per-language theta matrices**: `data/p02_lda_theta_[LANG].csv` (8 languages)
-  - Document-topic distribution with comment_id for traceability
-- **Per-language phi matrices**: `data/p02_lda_phi_[LANG].csv`
-  - Topic-word probability distributions
-- **Top terms**: `data/p02_lda_top_words_[LANG].csv`
-  - Most characteristic terms for each topic (top 10)
-- **Dominant topics**: `data/p02_lda_dominant_topics_[LANG].csv`
-  - Single best topic assignment per document
-- **Summary metrics**: 
-  - `data/p02_lda_model_summary.csv` - Vocabulary size, perplexity, coherence
-  - `data/p02_lda_topic_optimization.csv` - Coherence grid search results
-  - `data/p02_lda_pipeline_metrics.csv` - Runtime, energy consumption (Wh), carbon footprint (gCO2e)
-
-**Configuration parameters:**
-```python
-SAMPLE_SIZE_PER_LANGUAGE = 1000      # Sample size per language
-MIN_TOPICS = 3                        # Minimum topics to test
-MAX_TOPICS = 10                       # Maximum topics to test
-LDA_PASSES = 10                       # Number of LDA passes
-LDA_ITERATIONS = 100                  # Iterations per pass
-POWER_WATTS = 100                     # CPU power estimate for energy tracking
-FR_GRID_KGCO2_PER_KWH = 0.06         # French grid carbon intensity
-```
-
-**Vocabulary filtering:**
-- Terms appearing in < 5 documents are eliminated (reduces noise)
-- Terms appearing in > 80% of documents are eliminated (reduces common words)
-- Automatic language-specific stopword removal and stemming
-
-### p02_aspects_gemma3_7b.py
-The aspect extraction pipeline currently exports:
-
-- Per-review aspects: [data/results_aspects_gemma3_7b_per_review.csv](data/results_aspects_gemma3_7b_per_review.csv)
-- Raw summary: [data/results_aspects_gemma3_7b_summary.csv](data/results_aspects_gemma3_7b_summary.csv)
-- Normalized summary (synonyms merged): [data/results_aspects_gemma3_7b_summary_normalized.csv](data/results_aspects_gemma3_7b_summary_normalized.csv)
-
-Typical command:
-
-```bash
-python p02_aspects_gemma3_7b.py --sample-size 50 --normalize
-```
-
-Notes:
-- Current model used in `p02`: `gemma3:4b`.
-- `--sample-size` accepts an integer or `total`.
-- The script keeps extraction robust to non-strict JSON model answers.
+1) **Progress bars**: Use `tqdm` for loops expected to run > 30 seconds
+2) **eCO2 tracking**: Report runtime, energy (Wh), and carbon footprint (gCO2e) at script completion
+   - Default: `POWER_WATTS = 150`, `FR_GRID_KGCO2_PER_KWH = 0.056`
 
 ## Environment
 
@@ -162,30 +77,3 @@ ${workspaceFolder}\\.venv\\Scripts\\python.exe
 Project-specific coding skill/instructions are stored in:
 
 - [.github/copilot-instructions.md](.github/copilot-instructions.md)
-
-## Git workflow (after each change)
-
-1) Check changes
-
-```bash
-git status
-```
-
-2) Stage and commit
-
-```bash
-git add .
-git commit -m "feat|fix|docs|chore: short message"
-```
-
-3) Push to GitHub
-
-```bash
-git push
-```
-
-### Important notes
-
-- The local hook blocks files larger than 500 KB (except configured exceptions).
-- Files `data/reviews_select.csv` and `results_*.csv` are allowed by project rules.
-- Large result CSV files are handled through Git LFS (`.gitattributes`).
