@@ -6,10 +6,30 @@ The project includes Python scripts for multiple NLP tasks, as well as R/Quarto 
 
 ## Python
 
-- Syntactic annotation: [p01_syntactic_dependency_analysis.ipynb](p01_syntactic_dependency_analysis.ipynb)
-- Main aspect extraction pipeline (Ollama Gemma 3):
-  - Script: [p02_aspects_gemma3_7b.py](p02_aspects_gemma3_7b.py)
-  - Notebook: [p02_aspects_gemma3_7b.ipynb](p02_aspects_gemma3_7b.ipynb)
+### p01: Syntactic Analysis
+- [p01_syntactic_dependency_analysis.ipynb](p01_syntactic_dependency_analysis.ipynb) - Dependency parsing and POS tagging
+
+### p02: Topic Modeling (LDA)
+- **Notebook**: [p02_lda_topic_modeling.ipynb](p02_lda_topic_modeling.ipynb)
+- **Purpose**: Latent Dirichlet Allocation (LDA) for multilingual topic modeling on Airbnb reviews
+- **Features**:
+  - Separate LDA models for 8 major languages (en, fr, es, de, it, pt, ko, nl)
+  - Automatic topic number optimization via coherence analysis (U_Mass metric)
+  - Vocabulary filtering (terms appearing in ≥5 documents)
+  - Extraction of phi (topic-word) and theta (document-topic) matrices with comment ID preservation
+  - Runtime & energy consumption tracking
+- **Output files** (8 languages × 4 file types):
+  - `p02_lda_theta_[LANG].csv` - Document-topic distributions (with comment_id)
+  - `p02_lda_phi_[LANG].csv` - Topic-word distributions
+  - `p02_lda_top_words_[LANG].csv` - Top 10 terms per topic
+  - `p02_lda_dominant_topics_[LANG].csv` - Dominant topic per document
+  - `p02_lda_model_summary.csv` - Model metrics (vocabulary, topics, coherence, perplexity)
+  - `p02_lda_topic_optimization.csv` - Coherence scores for topic number search (3-10)
+  - `p02_lda_pipeline_metrics.csv` - Runtime & energy/carbon metrics
+
+### p02 (Alternative): Aspect Extraction (Ollama Gemma 3)
+- **Script**: [p02_aspects_gemma3_7b.py](p02_aspects_gemma3_7b.py)
+- **Notebook**: [p02_aspects_gemma3_7b.ipynb](p02_aspects_gemma3_7b.ipynb)
 - Gender classification from first names:
   - [review_gender_classification.ipynb](review_gender_classification.ipynb)
   - [review_gender_classification2.ipynb](review_gender_classification2.ipynb)
@@ -72,9 +92,42 @@ print(f"Energy: {energy_kwh*1000:.2f} Wh")
 print(f"eCO2: {eco2_g:.2f} gCO2e")
 ```
 
-## Current p02 outputs
+## Current Pipeline Outputs
 
-The `p02` pipeline currently exports:
+### p02_lda_topic_modeling.ipynb
+The LDA topic modeling pipeline exports multilingual topic models:
+
+- **Per-language theta matrices**: `data/p02_lda_theta_[LANG].csv` (8 languages)
+  - Document-topic distribution with comment_id for traceability
+- **Per-language phi matrices**: `data/p02_lda_phi_[LANG].csv`
+  - Topic-word probability distributions
+- **Top terms**: `data/p02_lda_top_words_[LANG].csv`
+  - Most characteristic terms for each topic (top 10)
+- **Dominant topics**: `data/p02_lda_dominant_topics_[LANG].csv`
+  - Single best topic assignment per document
+- **Summary metrics**: 
+  - `data/p02_lda_model_summary.csv` - Vocabulary size, perplexity, coherence
+  - `data/p02_lda_topic_optimization.csv` - Coherence grid search results
+  - `data/p02_lda_pipeline_metrics.csv` - Runtime, energy consumption (Wh), carbon footprint (gCO2e)
+
+**Configuration parameters:**
+```python
+SAMPLE_SIZE_PER_LANGUAGE = 1000      # Sample size per language
+MIN_TOPICS = 3                        # Minimum topics to test
+MAX_TOPICS = 10                       # Maximum topics to test
+LDA_PASSES = 10                       # Number of LDA passes
+LDA_ITERATIONS = 100                  # Iterations per pass
+POWER_WATTS = 100                     # CPU power estimate for energy tracking
+FR_GRID_KGCO2_PER_KWH = 0.06         # French grid carbon intensity
+```
+
+**Vocabulary filtering:**
+- Terms appearing in < 5 documents are eliminated (reduces noise)
+- Terms appearing in > 80% of documents are eliminated (reduces common words)
+- Automatic language-specific stopword removal and stemming
+
+### p02_aspects_gemma3_7b.py
+The aspect extraction pipeline currently exports:
 
 - Per-review aspects: [data/results_aspects_gemma3_7b_per_review.csv](data/results_aspects_gemma3_7b_per_review.csv)
 - Raw summary: [data/results_aspects_gemma3_7b_summary.csv](data/results_aspects_gemma3_7b_summary.csv)
