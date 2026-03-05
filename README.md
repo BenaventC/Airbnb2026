@@ -19,8 +19,7 @@ The project includes Python scripts for multiple NLP tasks, as well as R/Quarto 
   - Extraction of phi (topic-word) and theta (document-topic) matrices with comment ID preservation
   - Runtime & energy consumption tracking
 
-### p02 (Alternative): Aspect Extraction (Ollama Gemma 3)
-- [p02_aspects_gemma3_7b.ipynb](p02_aspects_gemma3_7b.ipynb)
+### p03-p04: Supporting Analysis
 - Gender classification from first names:
   - [review_gender_classification.ipynb](review_gender_classification.ipynb)
   - [review_gender_classification2.ipynb](review_gender_classification2.ipynb)
