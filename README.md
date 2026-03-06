@@ -4,6 +4,14 @@ This repository contains experiments developed with Master AISO students in an a
 
 The project includes Python scripts for multiple NLP tasks, as well as R/Quarto scripts for statistical analysis and Beamer presentation generation.
 
+---
+
+<div align="center">
+  <img src="Images/leonoracarrington.jpg" alt="Leonora Carrington - Surreal Inspiration" width="400" />
+</div>
+
+---
+
 ## Python
 
 ### p01: Syntactic Analysis
