@@ -11,7 +11,7 @@ format:
     colortheme: default
     fig-pos: 'center'
     fig-width: 9
-    fig-height: 6
+    fig-height: 5
     incremental: true 
 header-includes:
   - |
@@ -41,6 +41,7 @@ library(cld3)
 # Load the treemap library for visualization
 library(treemapify)
 library(treemap)
+library(cowplot)
 
 ```
 
@@ -48,9 +49,86 @@ library(treemap)
 
 # Data structure
 
+
+
 Hosts(t) \<- listings (t) -\> reviews -\> Guest
 
-# Listings and hosts
+---
+
+
+# Listings
+
+```{r}
+# Chargement des données
+listings <- read_csv("./data/listings.csv") %>%
+  mutate(
+    price_numeric = as.numeric(gsub("\\$", "", price)),
+    accommodates_recod = ifelse(accommodates > 6, 7, accommodates)
+  )
+
+# Médianes pour accommodates_recod
+medians_accommodates <- listings %>%
+  group_by(accommodates_recod) %>%
+  summarise(median_price = median(price_numeric, na.rm = TRUE))
+
+# Médianes pour room_type
+medians_room_type <- listings %>%
+  group_by(room_type) %>%
+  summarise(median_price = median(price_numeric, na.rm = TRUE))
+
+# Graphique 1 : par accommodates_recod
+p1 <- ggplot(listings, aes(x = price_numeric)) +
+  geom_histogram(binwidth = 10, fill = "skyblue", color = "black") +
+  geom_vline(
+    data = medians_accommodates,
+    aes(xintercept = median_price),
+    color = "red",
+    linetype = "dashed",
+    linewidth = 1
+  ) +
+  scale_x_continuous(breaks = seq(0, max(listings$price_numeric, na.rm = TRUE), by = 50)) +
+  labs(x = "Prix", y = "Fréquence", title = "Histogramme des prix par nombre de voyageurs") +
+  theme_minimal() +
+  facet_grid(accommodates_recod ~ ., scales = "free_y")
+
+# Graphique 2 : par room_type
+p2 <- ggplot(listings, aes(x = price_numeric)) +
+  geom_histogram(binwidth = 10, fill = "skyblue", color = "black") +
+  geom_vline(
+    data = medians_room_type,
+    aes(xintercept = median_price),
+    color = "red",
+    linetype = "dashed",
+    linewidth = 1
+  ) +
+  scale_x_continuous(breaks = seq(0, max(listings$price_numeric, na.rm = TRUE), by = 50)) +
+  labs(x = "Prix", y = "Fréquence", title = "Histogramme des prix par type de logement") +
+  theme_minimal() +
+  facet_grid(room_type ~ ., scales = "free_y")
+
+combined_plot <- plot_grid(p1, p2, ncol = 1)
+
+
+
+
+ggsave(
+  filename = "Images/combined_histograms.jpeg",
+  plot = combined_plot,
+  width = 27,
+  height = 17,
+  units = "cm",
+  dpi = 300
+)
+
+```
+
+
+
+![Histogramme des prix](combined_histograms.jpeg)
+
+
+
+# Hosts
 
 Un hôte peut détenir plusieurs logements. Les amateurs et les pros. Quelle concentration ?
 
@@ -120,7 +198,7 @@ foo %>%
 
 \normalsize
 
----
+------------------------------------------------------------------------
 
 ## Synthesis
 
@@ -134,11 +212,15 @@ foo %>%
 
 ------------------------------------------------------------------------
 
-# Reviews and Guests
+# Reviews 
 
 -   Reviewers are described only by their surname, we used a small lmm to classify tham as Woman, Man, Couple, or company with an error correction component to improve the qualification.
 -   The reviews are in many languages. The language detection is performed using cld3 (@ojo_divers-bench_2025). We categorize the languages into 7 major groups.(we have to improve the ontology) Here is the representation in the form of a treemap.
--   
+-   The reviews could be long or short
+
+
+# Guest
+
 
 ------------------------------------------------------------------------
 
@@ -148,14 +230,24 @@ foo %>%
 
 ```{r}
 
-sentiment_analysis_results <- read_csv("sentiment_analysis_results.csv") |>
+sentiment_analysis_results <- read_csv("data/sentiment_analysis_results.csv") |>
   select(langue, langue_short, sentiment, sentiment_score)
 
-first1000_gender <- read_csv("first1000_gender.csv")
+first1000_gender <- read_csv("data/first1000_gender.csv")
 
 foo<-cbind(first1000_gender,sentiment_analysis_results) |>
   filter(gender!="Entreprise")
 table(first1000_gender$gender, first1000_gender$confidence_score)
+
+```
+
+
+---
+
+## Sentiment
+
+
+```{r}
 
 fit<-lm(sentiment_score~gender*langue_short, foo)
 summary(fit)
@@ -207,7 +299,7 @@ reviews <- reviews %>%
                          ifelse(langue == "fr", "French",
                                ifelse(langue %in% c("it", "es", "pt", "ca", "ro"), "Latin",
                                      ifelse(langue %in% c("de", "nl"), "Germanic", 
-                                            ifelse(langue %in% c("zh", "ja","ko"), "East Asia", "others"))))),
+                                            ifelse(langue %in% c("zh", "ja","ko"), "East Asia", "Others"))))),
     nwords = str_count(comments, "\\w+")  # Count words in each comment
   )
 
@@ -215,8 +307,6 @@ reviews <- reviews %>%
 write.csv(reviews, "./data/reviews_select.csv")
 
 ```
-
-
 
 ```{r}
 # Calcul de la moyenne et de la médiane
@@ -278,7 +368,7 @@ ggsave(
 
 ```
 
----
+------------------------------------------------------------------------
 
 ```{r}
 
@@ -320,8 +410,6 @@ ggsave(
 
 ```{r}
 ```
-
-
 
 ## Cross
 
