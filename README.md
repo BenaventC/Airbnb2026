@@ -25,11 +25,30 @@ The project embodies a symbolist spirit: when things correspond, Large Language 
 ### 01: Syntactic Analysis
 - [p01_syntactic_dependency_analysis.ipynb](p01_syntactic_dependency_analysis.ipynb) - Dependency parsing and POS tagging
 
-### 02: Adjective-Noun Analysis (TSNE)
+### 02: Adjective-Noun Analysis (AMOD + t-SNE)
 - **Notebook**: [p02_amod_adj_noun_tsne.ipynb](p02_amod_adj_noun_tsne.ipynb)
-- **Purpose**: TSNE clustering and visualization of adjective-noun relationships from syntactic dependencies
-- **Script**: [p02_amod_adj_noun_tsne.py](p02_amod_adj_noun_tsne.py) - Main extraction and TSNE computation
-- **Outputs**: Cross-tabulations, distance matrices, and TSNE embedding summaries
+- **Purpose**: Extract AMOD (adjective modifying noun) relationships from syntactic annotations, compute semantic similarity, and visualize via t-SNE projection + heatmap
+- **Pipeline Structure** (9 sections per skill rules):
+  1. Imports & constants – Load packages, set POWER_WATTS, FR_GRID_KGCO2_PER_KWH, timer
+  2. GPU detection – Automatic CUDA detection with CuPy optional acceleration (CPU fallback)
+  3. Helpers – Functions for normalization, token extraction, AMOD pair discovery, distance computation
+  4. Data prep – Load CSV, clean tokens, apply sampling strategy
+  5. Extraction loop – Extract AMOD pairs by sentence (uses tqdm for progress)
+  6. Aggregation – Crosstab ADJ × NOUN, frequency filtering (≥20), cosine distance matrix, t-SNE
+  7. CSV exports – 4 output files (pairs, crosstab, distances, t-SNE coords)
+  8. Energy summary – Runtime, Wh, gCO2e metrics
+  9. Visualizations – t-SNE scatter (385 adjectifs) + heatmap (top 20 × 20)
+- **Outputs**: 
+  - `results_amod_pairs_per_review.csv` – All AMOD pairs extracted
+  - `results_amod_crosstab_summary.csv` – ADJ × NOUN co-occurrence matrix
+  - `results_amod_distance_summary.csv` – Cosine distance matrix (ADJ × ADJ)
+  - `results_amod_tsne_summary.csv` – 2D t-SNE coordinates + frequency + noun count
+- **Latest Execution** (full dataset):
+  - **Input**: 3.5M annotations from reviews
+  - **Extraction**: 126,965 AMOD pairs detected
+  - **Filtering**: 385 adjectives (freq ≥ 20) × 3,225 nouns
+  - **Runtime**: 1,119 sec (~18.6 min) on CPU
+  - **Energy**: 46.62 Wh | **CO2**: 2.61 gCO2e
 
 ### 04: Topic Modeling (LDA)
 - **Notebook**: [p04_lda_topic_modeling.ipynb](p04_lda_topic_modeling.ipynb)
@@ -73,6 +92,25 @@ For visual presentation. (Work in progress)
 - ABSA and sentiment workflows (BERT and local LLM-based pipelines)
 - Local LLM usage (Ollama / Gemma-based analysis notebooks)
 - Reproducible research workflow with Git, Git LFS, and structured outputs
+- t-SNE dimensionality reduction and semantic clustering
+
+## Benchmark Results – Recent Runs
+
+### AMOD Pipeline (p02) – Full Dataset Execution
+| Metric | Value |
+|--------|-------|
+| **Input corpus** | 3.5M syntactic annotations (Airbnb reviews) |
+| **AMOD pairs extracted** | 126,965 |
+| **Adjectives after filtering** | 385 (freq ≥ 20) |
+| **Unique nouns** | 3,225 |
+| **Runtime** | 1,119 sec (~18.6 min) |
+| **Energy** | 46.62 Wh |
+| **CO2 footprint** | 2.61 gCO2e |
+| **Hardware** | CPU only (no GPU detected in test environment) |
+| **Visualizations** | t-SNE 2D projection (385 clusters), heatmap (20×20 top pairs) |
+
+**Key Finding**: AMOD "great" dominates noun "location" (~4,000 co-occurrences), suggesting strong positive sentiment toward accommodation geography in reviews.
+
 
 ## Project standards (progress and eCO2)
 
@@ -152,8 +190,9 @@ Each analysis section should include a **markdown cell** explaining its purpose,
 - ✓ Output columns are stable and documented
 - ✓ No hidden kernel state dependencies
 - ✓ Reproducible with same parameters
-- ✓ Each section has explanatory markdown
+- ✓ Each section has mandatory explanatory markdown (2-3 sentences)
 - ✓ GPU/CPU branching with fallback implemented
+- ✓ Final outputs include runtime/energy/eCO2 metrics
 
 ---
 
