@@ -1,3 +1,4 @@
 data/reviews_select.csv filter=lfs diff=lfs merge=lfs -text
 results_*.csv filter=lfs diff=lfs merge=lfs -text
 data/results_*.csv filter=lfs diff=lfs merge=lfs -text
+*.pdf filter=lfs diff=lfs merge=lfs -text
