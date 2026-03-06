@@ -7,7 +7,14 @@ The project includes Python scripts for multiple NLP tasks, as well as R/Quarto 
 ---
 
 <div align="center">
-  <img src="Images/leonoracarrington.jpg" alt="Leonora Carrington - Surreal Inspiration" width="400" />
+  <img src="Images/leonoracarrington.jpg" alt="Leonora Carrington - Surreal Inspiration" width="320" />
+  
+  **Leonora Carrington** (1917–2011)  
+  *Artist, feminist, ecologist & surrealist pioneer*
+  
+  > "Born in Lancashire, Carrington traversed continents and consciousness—from Florence to Paris, Spain to Mexico—weaving mythology, esotericism, and human-animal metamorphoses into radical visionary art."
+  
+  📍 **Now exhibiting** at [Musée du Luxembourg](https://museeduluxembourg.fr/fr/agenda/evenement/leonora-carrington) (Feb 18 – Jul 19, 2026)
 </div>
 
 ---
