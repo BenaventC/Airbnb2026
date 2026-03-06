@@ -9,8 +9,14 @@ The project includes Python scripts for multiple NLP tasks, as well as R/Quarto 
 ### p01: Syntactic Analysis
 - [p01_syntactic_dependency_analysis.ipynb](p01_syntactic_dependency_analysis.ipynb) - Dependency parsing and POS tagging
 
-### p02: Topic Modeling (LDA)
-- **Notebook**: [p02_lda_topic_modeling.ipynb](p02_lda_topic_modeling.ipynb)
+### p02: Adjective-Noun Analysis (TSNE)
+- **Notebook**: [p02_amod_adj_noun_tsne.ipynb](p02_amod_adj_noun_tsne.ipynb)
+- **Purpose**: TSNE clustering and visualization of adjective-noun relationships from syntactic dependencies
+- **Script**: [p02_amod_adj_noun_tsne.py](p02_amod_adj_noun_tsne.py) - Main extraction and TSNE computation
+- **Outputs**: Cross-tabulations, distance matrices, and TSNE embedding summaries
+
+### p04: Topic Modeling (LDA)
+- **Notebook**: [p04_lda_topic_modeling.ipynb](p04_lda_topic_modeling.ipynb)
 - **Purpose**: Latent Dirichlet Allocation (LDA) for multilingual topic modeling on Airbnb reviews
 - **Features**:
   - Separate LDA models for 8 major languages (en, fr, es, de, it, pt, ko, nl)
@@ -19,15 +25,7 @@ The project includes Python scripts for multiple NLP tasks, as well as R/Quarto 
   - Extraction of phi (topic-word) and theta (document-topic) matrices with comment ID preservation
   - Runtime & energy consumption tracking
 
-### p03: Adjective-Noun Analysis (TSNE)
-- **Notebook**: [p03_amod_adj_noun_tsne.ipynb](p03_amod_adj_noun_tsne.ipynb)
-- **Purpose**: TSNE clustering and visualization of adjective-noun relationships from syntactic dependencies
-- **Scripts**:
-  - [p03_amod_adj_noun_tsne.py](p03_amod_adj_noun_tsne.py) - Main extraction and TSNE computation
-  - [p03_amod_tsne_plot.py](p03_amod_tsne_plot.py) - Visualization utilities
-- **Outputs**: Cross-tabulations, distance matrices, and TSNE embedding summaries
-
-### p03-p04: Supporting Analysis
+### p05-p07: Supporting Analysis
 - Gender classification from first names:
   - [review_gender_classification.ipynb](review_gender_classification.ipynb)
   - [review_gender_classification2.ipynb](review_gender_classification2.ipynb)
