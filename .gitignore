@@ -35,14 +35,15 @@ Images/
 *.tex
 
 # Large binary/data artifacts often better out of git
+*.pdf
+*.png
+*.jpg
+*.jpeg
 *.zip
 *.7z
 *.parquet
 *.feather
 *.pkl
-
-# PDF render outputs from Quarto (are versioned)
-# Exception: Quarto-generated PDFs are committed
 
 # Strict research mode: ignore data payloads
 data/**
@@ -51,7 +52,6 @@ data/**
 !data/reviews_select.csv
 !data/results_*.csv
 !results_*.csv
-!*.pdf
 
 # Keep only lightweight/public metadata in data (if needed)
 !data/.gitkeep
