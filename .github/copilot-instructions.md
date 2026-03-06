@@ -27,6 +27,13 @@ Chaque section doit inclure une **cellule markdown explicative** décrivant son 
 8. **Exports CSV** - Per-review et synthèse
 9. **Résumé final (runtime/eCO2)** - Afficher durée, Wh, gCO2e, date/heure fin
 
+### Documentation obligatoire des sections
+**RÈGLE EXPLICITE** : Chaque section de notebook/script DOIT avoir une cellule markdown descriptive **immédiatement sous le titre**, expliquant en 2-3 phrases simples:
+- **L'objectif** : qu'est-ce que cette étape accomplit (langage simple, verbes actifs)
+- **Les transformations clés** : données/variables entrantes vs sortantes
+- Exemple bon format : "Charge le CSV, nettoie les données (supprime tokens vides, normalise), puis crée l'échantillon à traiter."
+- Exemple mauvais format : "Section pour traiter données" ❌
+
 ## Standards Ollama
 - Endpoint: `http://localhost:11434/api/generate`
 - Paramètres minimaux: `model`, `prompt`, `stream=False`, `temperature`
@@ -59,5 +66,6 @@ Tous les scripts de traitement **doivent**:
 - Le script passe sur `--sample-size 5`.
 - Les colonnes de sortie sont stables et documentées.
 - Aucun notebook/script ne dépend d’un état caché du kernel.
-- Les résultats sont reproductibles avec les mêmes paramètres.- **Chaque section (notebook/script) possède une cellule markdown explicative** décrivant son objectif avant le code
-- **GPU/CPU branching configuré** avec détection et fallback CPU implanté (si applicable au script)
+- Les résultats sont reproductibles avec les mêmes paramètres.
+- **Chaque section (notebook/script) possède une cellule markdown explicative** décrivant son objectif (2-3 phrases simples) immédiatement sous le titre.
+- **GPU/CPU branching configuré** avec détection et fallback CPU implanté (si applicable au script).
