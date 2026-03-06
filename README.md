@@ -19,6 +19,14 @@ The project includes Python scripts for multiple NLP tasks, as well as R/Quarto 
   - Extraction of phi (topic-word) and theta (document-topic) matrices with comment ID preservation
   - Runtime & energy consumption tracking
 
+### p03: Adjective-Noun Analysis (TSNE)
+- **Notebook**: [p03_amod_adj_noun_tsne.ipynb](p03_amod_adj_noun_tsne.ipynb)
+- **Purpose**: TSNE clustering and visualization of adjective-noun relationships from syntactic dependencies
+- **Scripts**:
+  - [p03_amod_adj_noun_tsne.py](p03_amod_adj_noun_tsne.py) - Main extraction and TSNE computation
+  - [p03_amod_tsne_plot.py](p03_amod_tsne_plot.py) - Visualization utilities
+- **Outputs**: Cross-tabulations, distance matrices, and TSNE embedding summaries
+
 ### p03-p04: Supporting Analysis
 - Gender classification from first names:
   - [review_gender_classification.ipynb](review_gender_classification.ipynb)
