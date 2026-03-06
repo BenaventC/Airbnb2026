@@ -31,14 +31,10 @@ NUL
 script00_files/
 script_listings_files/
 script00_listing_files/
-Images/
 *.tex
 
 # Large binary/data artifacts often better out of git
 *.pdf
-*.png
-*.jpg
-*.jpeg
 *.zip
 *.7z
 *.parquet
