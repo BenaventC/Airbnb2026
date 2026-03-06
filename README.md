@@ -77,8 +77,67 @@ Recommended interpreter path in VS Code:
 ${workspaceFolder}\\.venv\\Scripts\\python.exe
 ```
 
-## Copilot skill rules
+## Development Guidelines
 
-Project-specific coding skill/instructions are stored in:
+### Pipeline Architecture
 
-- [.github/copilot-instructions.md](.github/copilot-instructions.md)
+This project follows a **reproducible NLP pipeline** structured as:
+
+1. **Data Filtering** – Language detection, deduplication, non-empty text validation
+2. **Extraction** – Aspects, sentiment, syntactic features with local LLMs (Gemma/BERT)
+3. **Normalization** – Optional text/label standardization
+4. **Export** – CSV outputs with runtime/energy/eCO2 metrics
+
+### Code Standards
+
+#### Script Naming & I/O
+- Prefix scripts with `pXX_` (e.g., `p05_aspects_gemma3_7b.py`)
+- All input/output in `data/` folder (no hardcoded absolute paths)
+- Include `--sample-size` parameter for all scripts
+
+#### Progress & Observability
+- Progress bars: `tqdm` for loops expected to run > 30 seconds
+- Final output includes: runtime (seconds), energy (Wh), carbon footprint (gCO2e)
+- Log timestamp and completion status
+
+#### GPU & Parallelization
+- **Detect available GPUs** via `torch.cuda.device_count()` with automatic fallback to CPU
+- **Parallelize tasks** via GPU (up to 4 H100 workers) or CPU processes
+- **Multiprocessing config**: Use `spawn` mode to avoid CUDA deadlocks in Jupyter (Linux)
+- Per-worker logs: language, GPU#, runtime, energy consumption
+
+#### Local LLM Integration (Ollama)
+- Endpoint: `http://localhost:11434/api/generate`
+- Core parameters: `model`, `prompt`, `stream=False`, `temperature`
+- Error handling: Return empty output on network/JSON errors (don't crash pipelines)
+
+#### Pipeline Structure (Notebook/Script)
+Each analysis section should include a **markdown cell** explaining its purpose, followed by:
+1. Imports + constants (POWER_WATTS, FR_GRID_KGCO2_PER_KWH, counters)
+2. GPU detection & multiprocessing config
+3. Technical helpers (progress, API calls, error handling)
+4. Business logic helpers (parsing, normalization, entity extraction)
+5. Sample preparation (filtering, deduplication)
+6. Main processing loop (GPU/CPU-parallelized)
+7. Aggregation & statistics (by language/model/device)
+8. CSV exports (per-review + summary files)
+9. Runtime summary (duration, energy, eCO2, end timestamp)
+
+#### Output Format
+- Per-review: `data/results_*_per_review.csv`
+- Summary: `data/results_*_summary.csv`
+- Normalized summary (optional): `data/results_*_summary_normalized.csv`
+- Encoding: `utf-8` (always)
+
+#### Validation Checklist
+- ✓ Script runs on `--sample-size 5`
+- ✓ Output columns are stable and documented
+- ✓ No hidden kernel state dependencies
+- ✓ Reproducible with same parameters
+- ✓ Each section has explanatory markdown
+- ✓ GPU/CPU branching with fallback implemented
+
+---
+
+**Full project conventions and detailed rules:**  
+→ [.github/copilot-instructions.md](.github/copilot-instructions.md)
