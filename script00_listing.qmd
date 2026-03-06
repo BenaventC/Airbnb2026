@@ -43,28 +43,44 @@ library(treemapify)
 library(treemap)
 library(cowplot)
 
-```
 
-------------------------------------------------------------------------
-
-# Data structure
-
-
-
-Hosts(t) \<- listings (t) -\> reviews -\> Guest
-
----
-
-
-# Listings
-
-```{r}
 # Chargement des données
 listings <- read_csv("./data/listings.csv") %>%
   mutate(
     price_numeric = as.numeric(gsub("\\$", "", price)),
     accommodates_recod = ifelse(accommodates > 6, 7, accommodates)
   )
+
+# Chargement des données
+# Load the reviews dataset and remove HTML line breaks from comments
+reviews <- read_csv("./data/reviews_select.csv") %>%
+  mutate(comments = str_replace_all(comments, "<br/>", ". "))  # Clean comments by removing  tags
+
+
+
+
+reviews_short<-  reviews |>
+  select(listing_id,date, reviewer_id)
+
+
+
+
+
+
+
+```
+
+------------------------------------------------------------------------
+
+# Data structure
+
+Hosts(t) \<- listings (t) -\> reviews -\> Guest
+
+------------------------------------------------------------------------
+
+# Listings
+
+```{r}
 
 # Médianes pour accommodates_recod
 medians_accommodates <- listings %>%
@@ -122,10 +138,50 @@ ggsave(
 
 ```
 
+![](combined_histograms.jpeg)
+
+------------------------------------------------------------------------
+
+```{r}
+
+#on calcule le nombre d'avis par logement
+Avis<-reviews_short %>%
+  filter(listing_id != 1) %>% 
+  group_by(listing_id) %>%
+  summarise(avis = n())
+
+mean<-round(mean(Avis$avis),1)
+median<-median(Avis$avis)
+max<- max(Avis$avis)
+g1<-ggplot(Avis, aes(x=avis+1)) +geom_histogram(binwidth=.1,fill="coral3")+
+  theme_minimal()+ scale_x_log10()+
+  annotate("text", x=200, y=2000, size=3,label= paste0("moyenne=",mean,"- médiane=", median,"- max=",max))+
+  labs(x = "nombre d'avis par  offre", y = "Fréquences", title = "Distribution du nombre d'avis par offre", caption = "")
 
 
-![Histogramme des prix](combined_histograms.jpeg)
+library(ineq)
+library(gglorenz)
 
+#on analyse la concentration
+gini<-round(ineq(Avis$avis,type = c("Gini")),2)
+
+g2<-Avis %>%
+    ggplot(aes(avis)) +
+    stat_lorenz(desc = TRUE,size=1.2,color="darkred") +
+    coord_fixed() +
+    geom_abline(linetype = "dashed") +
+    theme_minimal() +labs(x = "Part cumulée des offres",
+         y = "Part cumulée des avis",
+         title = "Concentration du nombre d'avis par offre",
+         caption = "") +
+  annotate("text", x=.35, y=.6, size=3,label= paste0("indice de Gini=",gini))
+
+cowplot::plot_grid(g1, g2, ncol = 2)
+
+
+```
+
+---
 
 
 # Hosts
@@ -212,15 +268,13 @@ foo %>%
 
 ------------------------------------------------------------------------
 
-# Reviews 
+# Reviews
 
 -   Reviewers are described only by their surname, we used a small lmm to classify tham as Woman, Man, Couple, or company with an error correction component to improve the qualification.
 -   The reviews are in many languages. The language detection is performed using cld3 (@ojo_divers-bench_2025). We categorize the languages into 7 major groups.(we have to improve the ontology) Here is the representation in the form of a treemap.
 -   The reviews could be long or short
 
-
 # Guest
-
 
 ------------------------------------------------------------------------
 
@@ -241,11 +295,9 @@ table(first1000_gender$gender, first1000_gender$confidence_score)
 
 ```
 
-
----
+------------------------------------------------------------------------
 
 ## Sentiment
-
 
 ```{r}
 
@@ -285,9 +337,6 @@ cat_plot(fit, pred="langue_short", modx="gender")
 
 ```{r}
 
-# Load the reviews dataset and remove HTML line breaks from comments
-reviews <- read_csv("./data/reviews.csv") %>%
-  mutate(comments = str_remove_all(comments, "<br/>"))  # Clean comments by removing  tags
 
 # Filter for reviews after June 13, 2023, and add language and word count features
 reviews <- reviews %>%

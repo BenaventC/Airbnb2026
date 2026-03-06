@@ -20,6 +20,9 @@ __pycache__/
 # Temporary files
 tmpclaude-*
 *.tmp
+*.TMP
+.RDataTmp
+.RData.tmp
 *.log
 nul
 NUL
