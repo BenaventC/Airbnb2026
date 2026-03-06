@@ -12,25 +12,26 @@ The project embodies a symbolist spirit: when things correspond, Large Language 
   **Leonora Carrington** (1917–2011)  
   *Artist, feminist, ecologist & surrealist pioneer*
   
-  > "Born in Lancashire, Carrington traversed continents and consciousness—from Florence to Paris, Spain to Mexico—weaving mythology, esotericism, and human-animal metamorphoses into radical visionary art."
+  > "Born in Lancashire, Carrington traversed worlds and consciousness—from Florence to Paris, Spain to Mexico—weaving mythology, esotericism, and human-animal metamorphoses into visionary art."
   
   📍 **Now exhibiting** at [Musée du Luxembourg](https://museeduluxembourg.fr/fr/agenda/evenement/leonora-carrington) (Feb 18 – Jul 19, 2026)
 </div>
 
 ---
 
-## Python
+## Python codes
 
-### p01: Syntactic Analysis
+
+### 01: Syntactic Analysis
 - [p01_syntactic_dependency_analysis.ipynb](p01_syntactic_dependency_analysis.ipynb) - Dependency parsing and POS tagging
 
-### p02: Adjective-Noun Analysis (TSNE)
+### 02: Adjective-Noun Analysis (TSNE)
 - **Notebook**: [p02_amod_adj_noun_tsne.ipynb](p02_amod_adj_noun_tsne.ipynb)
 - **Purpose**: TSNE clustering and visualization of adjective-noun relationships from syntactic dependencies
 - **Script**: [p02_amod_adj_noun_tsne.py](p02_amod_adj_noun_tsne.py) - Main extraction and TSNE computation
 - **Outputs**: Cross-tabulations, distance matrices, and TSNE embedding summaries
 
-### p04: Topic Modeling (LDA)
+### 04: Topic Modeling (LDA)
 - **Notebook**: [p04_lda_topic_modeling.ipynb](p04_lda_topic_modeling.ipynb)
 - **Purpose**: Latent Dirichlet Allocation (LDA) for multilingual topic modeling on Airbnb reviews
 - **Features**:
@@ -40,7 +41,7 @@ The project embodies a symbolist spirit: when things correspond, Large Language 
   - Extraction of phi (topic-word) and theta (document-topic) matrices with comment ID preservation
   - Runtime & energy consumption tracking
 
-### p05-p07: Supporting Analysis
+### 05-p07: Supporting Analysis
 - Gender classification from first names:
   - [review_gender_classification.ipynb](review_gender_classification.ipynb)
   - [review_gender_classification2.ipynb](review_gender_classification2.ipynb)
@@ -54,10 +55,12 @@ The project embodies a symbolist spirit: when things correspond, Large Language 
   - [extract_age_from_name_ollama.ipynb](extract_age_from_name_ollama.ipynb)
   - [extract_reviewer_age.ipynb](extract_reviewer_age.ipynb)
 
-### p05: Aspect Extraction (Ollama Gemma 3)
+### 08: Aspect Extraction (Ollama Gemma 3)
 - [p05_aspects_gemma3_7b.ipynb](p05_aspects_gemma3_7b.ipynb)
 
 ## Quarto
+
+For visual presentation. (Work in progress)
 
 - Corpus listing/description: [script00_listing.qmd](script00_listing.qmd)
 - Faceted analysis: [script01_facet.qmd](script01_facet.qmd)
