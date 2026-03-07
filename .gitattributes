@@ -3,3 +3,4 @@ results_*.csv filter=lfs diff=lfs merge=lfs -text
 data/results_*.csv filter=lfs diff=lfs merge=lfs -text
 Images/*.jpg filter=lfs diff=lfs merge=lfs -text
 Images/*.jpeg filter=lfs diff=lfs merge=lfs -text
+*.ipynb filter=lfs diff=lfs merge=lfs -text
