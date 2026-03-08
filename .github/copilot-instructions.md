@@ -91,3 +91,18 @@ Règles obligatoires pour les prochaines mises en anglais:
 - Rédiger des paragraphes complets, clairs, et cohérents (pas de style télégraphique).
 - Conserver le sens technique exact (pipeline, runtime, CO2, jointure, etc.).
 - Ne pas modifier la logique du code sauf demande explicite.
+
+## Skill Unified Carbon Report
+Pour standardiser la mesure et l'export carbone dans un fichier unique partagé, utiliser le skill local:
+- Fichier: `.github/skills/carbon-unified-report/SKILL.md`
+
+Règles obligatoires lorsque ce skill est appliqué:
+- Un seul fichier: `data/carbon_emissions_report.csv`
+- Une ligne ajoutée par exécution (append logique)
+- Colonnes exactes:
+   - `nom du script execute`
+   - `nombre d'observations traitees`
+   - `date d'execution`
+   - `temps d'execution`
+   - `total KWatt/heure`
+   - `total eco2 en grammes`
