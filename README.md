@@ -23,7 +23,7 @@ The project embodies a symbolist spirit: when things correspond, Large Language 
 
 | Notebook | Purpose | Output |
 |----------|---------|--------|
-| **p00f** [Review Data Preparation](p00f_prepare_data.ipynb) | Last-year filtering, comment cleaning (`<br/>` replacement), `id` standardization, language detection, listing enrichment | `data/reviews_prepared.csv` (review-level enriched dataset) |
+| **p00** [Reviews Data Preparation](p00f_prepare_data.ipynb) | Last-year filtering, comment cleaning (`<br/>` replacement), `id` standardization, language detection, listing enrichment | `data/reviews_prepared.csv` (review-level enriched dataset) |
 | **p01** [Syntactic Dependency](p01_syntactic_dependency_analysis.ipynb) | Multilingual POS tagging & dependency parsing (6 languages, GPU-accelerated) | Token annotations (CoNLL-U format) |
 | **p02** [AMOD + t-SNE](p02_amod_adj_noun_tsne.ipynb) | Extract adjective-noun relations, semantic clustering | ADJ×NOUN crosstab, t-SNE projection |
 | **p03** [BERT Sentiment](p03_bert_sentiment_analysis.ipynb) | Sentiment classification (multi-label) | Sentiment scores per review |
