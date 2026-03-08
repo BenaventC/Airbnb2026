@@ -23,12 +23,12 @@ The project embodies a symbolist spirit: when things correspond, Large Language 
 
 | Notebook | Purpose | Output |
 |----------|---------|--------|
-| **p00** [Reviews Data Preparation](p00f_prepare_data.ipynb) | Last-year filtering, comment cleaning (`<br/>` replacement), `id` standardization, language detection, listing enrichment | `data/reviews_prepared.csv` (review-level enriched dataset) |
+| **p00** [Reviews Data Preparation](p00_prepare_data.ipynb) | Last-year filtering, comment cleaning (`<br/>` replacement), `id` standardization, language detection, listing enrichment | `data/reviews_prepared.csv` (review-level enriched dataset) |
 | **p01** [Syntactic Dependency](p01_syntactic_dependency_analysis.ipynb) | Multilingual POS tagging & dependency parsing (6 languages, GPU-accelerated) | Token annotations (CoNLL-U format) |
 | **p02** [AMOD + t-SNE](p02_amod_adj_noun_tsne.ipynb) | Extract adjective-noun relations, semantic clustering | ADJ×NOUN crosstab, t-SNE projection |
 | **p03** [BERT Sentiment](p03_bert_sentiment_analysis.ipynb) | Sentiment classification (multi-label) | Sentiment scores per review |
 | **p04** [LDA Topics](p04_lda_topic_modeling.ipynb) | Multilingual topic modeling (8 languages) | Topic distributions, phi/theta matrices |
-| **Gender, ABSA, Age** | Supporting notebooks (gender from names, aspect extraction, age estimation) | Classifier outputs, aspect scores |
+| **Gender, ABSA, Age** | Supporting notebooks (gender from names, aspect extraction, age estimation with comment-aware prompts, GPU/CPU fallback, unified carbon logging) | Classifier outputs, aspect scores, inferred ages |
 | **p08-p09** [Aspect + ABSA](p08_aspects_gemma3_7b.ipynb) | Aspect extraction & ABSA using Ollama Gemma3 | Aspects, sentiments, probabilities |
 
 ## Quarto Reports
@@ -49,10 +49,12 @@ The project embodies a symbolist spirit: when things correspond, Large Language 
 ## Repository Skills
 - **Mermaid Pipeline Style**: standardized white-background pastel Mermaid flowcharts with three blocks (`DATA INPUTS`, `INTERNAL PROCESSING`, `OUTPUTS`) and vertical node stacks in each block.
 - **English Notebook Style**: full markdown translation and editorial rewrite in polished English with elegant headings and technically faithful wording.
+- **Unified Carbon Report**: one shared `data/carbon_emissions_report.csv` appended at each run with a fixed six-column schema.
 
 Both skills are documented in:
 - `.github/skills/mermaid-pipeline/SKILL.md`
 - `.github/skills/english-notebook-style/SKILL.md`
+- `.github/skills/carbon-unified-report/SKILL.md`
 
 
 ## Project Standards
@@ -66,6 +68,7 @@ All scripts follow reproducible NLP pipeline principles with energy tracking:
 5. **Markdown documentation**: Each major section title must have explanatory markdown (2–3 sentences) below it describing objective & transformations.
 6. **Ollama integration** (local LLM): Call `http://localhost:11434/api/generate` with `stream=False`; catch network errors gracefully.
 7. **Output format**: Per-review `results_*_per_review.csv` + summary `results_*_summary.csv` (utf-8 encoding)
+8. **Unified carbon format**: append one row per run to `data/carbon_emissions_report.csv` with exact columns: `nom du script execute`, `nombre d'observations traitees`, `date d'execution`, `temps d'execution`, `total KWatt/heure`, `total eco2 en grammes`.
 
 ## Environment
 Python virtual environment: `.venv/` (canonical folder; `.venv-*` folders are deprecated)
