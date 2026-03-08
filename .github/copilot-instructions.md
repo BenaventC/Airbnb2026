@@ -69,3 +69,25 @@ Tous les scripts de traitement **doivent**:
 - Les résultats sont reproductibles avec les mêmes paramètres.
 - **Chaque section (notebook/script) possède une cellule markdown explicative** décrivant son objectif (2-3 phrases simples) immédiatement sous le titre.
 - **GPU/CPU branching configuré** avec détection et fallback CPU implanté (si applicable au script).
+
+## Skill Mermaid (Pipeline)
+Pour les diagrammes Mermaid de pipeline, utiliser le skill local:
+- Fichier: `.github/skills/mermaid-pipeline/SKILL.md`
+
+Règles obligatoires pour les prochains diagrammes:
+- Fond blanc + couleurs pastel claires.
+- 3 blocs principaux: `DATA INPUTS` (bleu), `INTERNAL PROCESSING` (jaune), `OUTPUTS` (vert).
+- Blocs principaux alignés horizontalement (gauche vers droite).
+- Boites internes empilees verticalement dans chaque bloc.
+- Fleches claires (gris clair), labels courts orientés action.
+
+## Skill English Notebook Style
+Pour la traduction et réécriture en anglais des cellules texte de notebook, utiliser le skill local:
+- Fichier: `.github/skills/english-notebook-style/SKILL.md`
+
+Règles obligatoires pour les prochaines mises en anglais:
+- Traduire toutes les cellules markdown (titre, sections, paragraphes explicatifs).
+- Utiliser des titres élégants et informatifs.
+- Rédiger des paragraphes complets, clairs, et cohérents (pas de style télégraphique).
+- Conserver le sens technique exact (pipeline, runtime, CO2, jointure, etc.).
+- Ne pas modifier la logique du code sauf demande explicite.

@@ -23,6 +23,7 @@ The project embodies a symbolist spirit: when things correspond, Large Language 
 
 | Notebook | Purpose | Output |
 |----------|---------|--------|
+| **p00f** [Review Data Preparation](p00f_prepare_data.ipynb) | Last-year filtering, comment cleaning (`<br/>` replacement), `id` standardization, language detection, listing enrichment | `data/reviews_prepared.csv` (review-level enriched dataset) |
 | **p01** [Syntactic Dependency](p01_syntactic_dependency_analysis.ipynb) | Multilingual POS tagging & dependency parsing (6 languages, GPU-accelerated) | Token annotations (CoNLL-U format) |
 | **p02** [AMOD + t-SNE](p02_amod_adj_noun_tsne.ipynb) | Extract adjective-noun relations, semantic clustering | ADJ×NOUN crosstab, t-SNE projection |
 | **p03** [BERT Sentiment](p03_bert_sentiment_analysis.ipynb) | Sentiment classification (multi-label) | Sentiment scores per review |
@@ -42,7 +43,16 @@ The project embodies a symbolist spirit: when things correspond, Large Language 
 - Local LLM workflows (Ollama/Gemma)
 - Topic modeling (LDA)
 - Dimensionality reduction (t-SNE)
+- Data preparation pipelines (cleaning, language detection, metadata enrichment)
 - Reproducible research (Git, Git LFS, energy tracking)
+
+## Repository Skills
+- **Mermaid Pipeline Style**: standardized white-background pastel Mermaid flowcharts with three blocks (`DATA INPUTS`, `INTERNAL PROCESSING`, `OUTPUTS`) and vertical node stacks in each block.
+- **English Notebook Style**: full markdown translation and editorial rewrite in polished English with elegant headings and technically faithful wording.
+
+Both skills are documented in:
+- `.github/skills/mermaid-pipeline/SKILL.md`
+- `.github/skills/english-notebook-style/SKILL.md`
 
 
 ## Project Standards
@@ -64,19 +74,20 @@ VS Code interpreter: `${workspaceFolder}\.venv\Scripts\python.exe`
 
 ## Development Guidelines
 
-### Core Pipeline Structure (9 Sections)
-1. Imports + constants (POWER_WATTS=150, FR_GRID_KGCO2_PER_KWH=0.056, timers, models)
+### Core Pipeline Structure (10 Sections)
+1. Imports + constants (`POWER_WATTS=350`, `FR_GRID_KGCO2_PER_KWH=0.0502`, timers, models)
 2. GPU detection & multiprocessing (torch.cuda.device_count(), mp.spawn())
 3. Technical helpers (progress bars, API calls, error handling)
 4. Business helpers (parsing, normalization, entity extraction)
 5. Sample preparation (filter languages, remove empty texts, apply Sample_Size)
 6. Main extraction loop (parallelize via GPU/CPU, tqdm progress)
 7. Aggregation & statistics (consolidate results, compute distributions)
-8. CSV exports (per-review + summary files, utf-8)
-9. Runtime summary (duration, Wh, gCO2e, end timestamp)
+8. Optional enrichment (e.g., left join with `listings.csv` before export)
+9. CSV exports (per-review + summary files, utf-8)
+10. Runtime summary (duration, Wh, gCO2e, end timestamp)
 
 ### Code Standards
-- **GPU/CPU branching**: Auto-detect CUDA devices; assign up to 4 H100 workers per task; CP fallback
+- **GPU/CPU branching**: Auto-detect CUDA devices; assign up to 4 H100 workers per task; CPU fallback
 - **Ollama integration**: Endpoint `http://localhost:11434/api/generate` with `stream=False`; timeout ~30s
 - **Reproducibility**: Same input + params → identical output; no hidden kernel state
 - **Validation**: Runs on `Sample_Size=5`; stable CSV columns; documented CI/CD friendly
