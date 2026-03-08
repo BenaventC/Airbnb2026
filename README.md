@@ -30,6 +30,7 @@ The project embodies a symbolist spirit: when things correspond, Large Language 
 | **p04** [LDA Topics](p04_lda_topic_modeling.ipynb) | Multilingual topic modeling (8 languages) | Topic distributions, phi/theta matrices |
 | **Gender, ABSA, Age** | Supporting notebooks (gender from names, aspect extraction, age estimation with comment-aware prompts, GPU/CPU fallback, unified carbon logging) | Classifier outputs, aspect scores, inferred ages |
 | **p08-p09** [Aspect + ABSA](p08_aspects_gemma3_7b.ipynb) | Aspect extraction & ABSA using Ollama Gemma3 | Aspects, sentiments, probabilities |
+| **p10** [Carbon Hourly Dashboard](p10_carbon_hourly_bar_report.ipynb) | Aggregate unified carbon logs and visualize total eCO2 by execution hour | `data/carbon_hourly_summary.csv` + hourly bar chart |
 
 ## Quarto Reports
 - [script00_listing.qmd](script00_listing.qmd) – Corpus description & statistics
