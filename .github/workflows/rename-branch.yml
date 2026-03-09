@@ -1,0 +1,37 @@
+name: Rename Branch AIrnb2026 to machineD
+
+on:
+  push:
+    branches:
+      - 'copilot/rename-airbnb2026-to-machined'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  rename-branch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Rename branch AIrnb2026 to machineD
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            try {
+              await github.rest.repos.renameBranch({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                branch: 'AIrnb2026',
+                new_name: 'machineD'
+              });
+              console.log('Successfully renamed branch AIrnb2026 to machineD');
+            } catch (error) {
+              if (error.status === 422) {
+                console.log('Branch machineD already exists, skipping rename');
+              } else if (error.status === 404) {
+                console.log('Branch AIrnb2026 not found, may have already been renamed');
+              } else {
+                throw error;
+              }
+            }
