@@ -40,6 +40,24 @@ L'objectif est de comparer des approches complémentaires dans un cadre reproduc
 ```{r}
 library(tidyverse)
 
+# Warm Palette B (project-wide graph style)
+pal_b <- c("#98CFC2", "#F4C5CF", "#C75146", "#D4A33F", "#B8D39E", "#E99288")
+pal_b_seq <- c("#FFF8EE", "#F9E8D5", "#F1D2BD", "#E3B793", "#C89062", "#A86845")
+
+theme_set(
+  theme_minimal(base_size = 12) +
+    theme(
+      plot.background = element_rect(fill = "#FBF5EE", color = NA),
+      panel.background = element_rect(fill = "#FBF5EE", color = NA),
+      panel.grid.major = element_line(color = "#E4D8CC", linewidth = 0.35),
+      panel.grid.minor = element_blank(),
+      plot.title = element_text(color = "#362B26", face = "bold"),
+      axis.title = element_text(color = "#362B26"),
+      axis.text = element_text(color = "#4A3A33")
+    )
+)
+
+
 set.seed(2026)
 
 paris_sim <- tibble(
@@ -59,9 +77,9 @@ subtitle_txt <- paste0(
 )
 
 ggplot(paris_sim, aes(x = centralite, y = nb_logements, label = arr_label)) +
-	geom_point(color = "#7D1836", size = 3, alpha = 0.9) +
-	geom_smooth(method = "lm", se = FALSE, color = "#0A235C", linewidth = 1.1) +
-	geom_text(size = 3.1, color = "#0A235C", vjust = -0.8, check_overlap = TRUE) +
+	geom_point(color = "#BA443C", size = 3, alpha = 0.9) +
+	geom_smooth(method = "lm", se = FALSE, color = "#70B4A3", linewidth = 1.1) +
+	geom_text(size = 3.1, color = "#70B4A3", vjust = -0.8, check_overlap = TRUE) +
 	labs(
 		title = "Paris (simulé) : centralité de la localisation et volume Airbnb",
 		subtitle = subtitle_txt,

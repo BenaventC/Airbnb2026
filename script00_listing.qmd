@@ -35,6 +35,24 @@ bibliography: references.bib
 ```{r}
 
 library(tidyverse)
+
+# Warm Palette B (project-wide graph style)
+pal_b <- c("#98CFC2", "#F4C5CF", "#C75146", "#D4A33F", "#B8D39E", "#E99288")
+pal_b_seq <- c("#FFF8EE", "#F9E8D5", "#F1D2BD", "#E3B793", "#C89062", "#A86845")
+
+theme_set(
+  theme_minimal(base_size = 12) +
+    theme(
+      plot.background = element_rect(fill = "#FBF5EE", color = NA),
+      panel.background = element_rect(fill = "#FBF5EE", color = NA),
+      panel.grid.major = element_line(color = "#E4D8CC", linewidth = 0.35),
+      panel.grid.minor = element_blank(),
+      plot.title = element_text(color = "#362B26", face = "bold"),
+      axis.title = element_text(color = "#362B26"),
+      axis.text = element_text(color = "#4A3A33")
+    )
+)
+
 library(readr)
 library(kableExtra)
 library(cld3)
@@ -94,11 +112,11 @@ medians_room_type <- listings %>%
 
 # Graphique 1 : par accommodates_recod
 p1 <- ggplot(listings, aes(x = price_numeric)) +
-  geom_histogram(binwidth = 10, fill = "skyblue", color = "black") +
+  geom_histogram(binwidth = 10, fill = "#98CFC2", color = "black") +
   geom_vline(
     data = medians_accommodates,
     aes(xintercept = median_price),
-    color = "red",
+    color = "#BA443C",
     linetype = "dashed",
     linewidth = 1
   ) +
@@ -109,11 +127,11 @@ p1 <- ggplot(listings, aes(x = price_numeric)) +
 
 # Graphique 2 : par room_type
 p2 <- ggplot(listings, aes(x = price_numeric)) +
-  geom_histogram(binwidth = 10, fill = "skyblue", color = "black") +
+  geom_histogram(binwidth = 10, fill = "#98CFC2", color = "black") +
   geom_vline(
     data = medians_room_type,
     aes(xintercept = median_price),
-    color = "red",
+    color = "#BA443C",
     linetype = "dashed",
     linewidth = 1
   ) +
@@ -153,7 +171,7 @@ Avis<-reviews_short %>%
 mean<-round(mean(Avis$avis),1)
 median<-median(Avis$avis)
 max<- max(Avis$avis)
-g1<-ggplot(Avis, aes(x=avis+1)) +geom_histogram(binwidth=.1,fill="coral3")+
+g1<-ggplot(Avis, aes(x=avis+1)) +geom_histogram(binwidth=.1,fill="#C75146")+
   theme_minimal()+ scale_x_log10()+
   annotate("text", x=200, y=2000, size=3,label= paste0("moyenne=",mean,"- médiane=", median,"- max=",max))+
   labs(x = "nombre d'avis par  offre", y = "Fréquences", title = "Distribution du nombre d'avis par offre", caption = "")
@@ -167,7 +185,7 @@ gini<-round(ineq(Avis$avis,type = c("Gini")),2)
 
 g2<-Avis %>%
     ggplot(aes(avis)) +
-    stat_lorenz(desc = TRUE,size=1.2,color="darkred") +
+    stat_lorenz(desc = TRUE,size=1.2,color="#BA443C") +
     coord_fixed() +
     geom_abline(linetype = "dashed") +
     theme_minimal() +labs(x = "Part cumulée des offres",
@@ -364,12 +382,12 @@ median_nwords <- median(reviews$nwords, na.rm = TRUE)
 
 # Création du graphique avec les lignes verticales
 ggplot(reviews, aes(nwords)) +
-  geom_histogram(fill = "orange2", binwidth = 1) +
+  geom_histogram(fill = "#D4A33F", binwidth = 1) +
   labs(title = "Distribution des avis en fonction de leur longueur en nombre de mots") +
   # Ligne verticale pour la moyenne
   geom_vline(
     aes(xintercept = mean_nwords),
-    color = "pink4",  # Couleur rose-rouge pour la moyenne
+    color = "#C75146",  # Couleur rose-rouge pour la moyenne
     linetype = "dashed",
     linewidth = 1
   ) +
@@ -381,12 +399,12 @@ ggplot(reviews, aes(nwords)) +
     label = paste0("Moyenne = ", round(mean_nwords, 1)),
     vjust = 2,
     hjust = 0.5,
-    color = "pink4"
+    color = "#C75146"
   ) +
   # Ligne verticale pour la médiane
   geom_vline(
     aes(xintercept = median_nwords),
-    color = "red3",  # Couleur rouge pour la médiane
+    color = "#BA443C",  # Couleur rouge pour la médiane
     linetype = "dashed",
     linewidth = 1
   ) +
@@ -398,7 +416,7 @@ ggplot(reviews, aes(nwords)) +
     label = paste0("Médiane = ", round(median_nwords, 1)),
     vjust = 1.0,
     hjust = 0.5,
-    color = "red3"
+    color = "#BA443C"
   )+
   labs(x="nombre de mots")+
   xlim(0,200)
@@ -439,7 +457,7 @@ ggplot(foo, aes(area = n, fill = nwords, label = langue,
   labs(title="The distribution of reviews by language and word count")+
   # Inverser le gradient de couleur (rouge-bleu-vert au lieu de vert-bleu-rouge)
   scale_fill_gradientn(
-    colours = RColorBrewer::brewer.pal(n = 11, name = "RdBu")
+    colours = pal_b_seq
   )
 
 
