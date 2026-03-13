@@ -30,6 +30,9 @@ The project embodies a symbolist spirit: when things correspond, Large Language 
 - **P12** [Price Distribution Analysis](P12_price_distribution_analysis.ipynb)
   IQR outlier filtering, price distribution and cumulative rental value, boxplots by listing type/capacity/neighbourhood, and arrondissement-level choropleth (local shapefiles).
   Outputs: `data/P00c_listings_prices_cleaned.csv`, `data/P00c_mean_price_by_arrondissement.csv`, and distribution/map PNGs.
+- **P12b** [Arrondissement Listing Summary](P12b_arrondissement_listing_summary.ipynb)
+  Aggregates the Paris listings table by arrondissement and reports mean price, listing count, and the share of listings that accommodate more than four guests.
+  Outputs: `data/results_P12b_arrondissement_listing_summary.csv` and `data/P12b_arrondissement_listing_summary.png`.
 
 ### 3. Linguistic Structure and Semantics
 - **p05** [Syntactic Dependency](p05_syntactic_dependency_analysis.ipynb)

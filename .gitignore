@@ -32,6 +32,8 @@ script00_files/
 script_listings_files/
 script00_listing_files/
 *.tex
+Images/P12b_arrondissement_mean_price_map.png
+Images/P12b_arrondissement_share_accommodates_gt_4_map.png
 
 # Large binary/data artifacts often better out of git
 *.pdf
