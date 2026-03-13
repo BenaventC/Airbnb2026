@@ -41,15 +41,15 @@ Une tâche difficile et essentielle : identifier dans un texte des arguments, et
 library(tidyverse)
 
 # Warm Palette B (project-wide graph style)
-pal_b <- c("#98CFC2", "#F4C5CF", "#C75146", "#D4A33F", "#B8D39E", "#E99288")
+pal_b <- c("#A3A381", "#D7CE93", "#EFEBCE", "#D8A48F", "#BB8487")
 pal_b_seq <- c("#FFF8EE", "#F9E8D5", "#F1D2BD", "#E3B793", "#C89062", "#A86845")
 
 theme_set(
   theme_minimal(base_size = 12) +
     theme(
-      plot.background = element_rect(fill = "#FBF5EE", color = NA),
-      panel.background = element_rect(fill = "#FBF5EE", color = NA),
-      panel.grid.major = element_line(color = "#E4D8CC", linewidth = 0.35),
+      plot.background = element_rect(fill = "#EFEBCE", color = NA),
+      panel.background = element_rect(fill = "#EFEBCE", color = NA),
+      panel.grid.major = element_line(color = "#D7CE93", linewidth = 0.35),
       panel.grid.minor = element_blank(),
       plot.title = element_text(color = "#362B26", face = "bold"),
       axis.title = element_text(color = "#362B26"),
@@ -147,7 +147,7 @@ set.seed(42)
 ggplot(foo, aes(label = Aspects, size = log(n), color= mean, alpha=-sd)) +
   geom_text_wordcloud() +
   scale_size_area(max_size = 10) +
-  scale_color_gradient2(low = "orange", mid="#F4C5CF" ,high = "#70B4A3") +  # Dégradé de vert
+  scale_color_gradient2(low = "#D8A48F", mid="#D7CE93" ,high = "#A3A381") +  # Dégradé de vert
   theme_minimal()
 
 
@@ -162,7 +162,7 @@ ggplot(foo, aes(label = Aspects, size=n)) +
   geom_text(aes(x = n, y=mean, size=sd))+
   labs(y="sentiment",
        x=" Facette par ordre de fréquence")+
-  scale_color_gradient2(low = "orange", mid="#F4C5CF" ,high = "#70B4A3") +  # Dégradé de vert
+  scale_color_gradient2(low = "#D8A48F", mid="#D7CE93" ,high = "#A3A381") +  # Dégradé de vert
   theme_minimal()
 
 

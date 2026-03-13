@@ -43,15 +43,15 @@ We then examine their relationship with the overall sentiment, as measured by tw
 library(tidyverse)
 
 # Warm Palette B (project-wide graph style)
-pal_b <- c("#98CFC2", "#F4C5CF", "#C75146", "#D4A33F", "#B8D39E", "#E99288")
+pal_b <- c("#A3A381", "#D7CE93", "#EFEBCE", "#D8A48F", "#BB8487")
 pal_b_seq <- c("#FFF8EE", "#F9E8D5", "#F1D2BD", "#E3B793", "#C89062", "#A86845")
 
 theme_set(
   theme_minimal(base_size = 12) +
     theme(
-      plot.background = element_rect(fill = "#FBF5EE", color = NA),
-      panel.background = element_rect(fill = "#FBF5EE", color = NA),
-      panel.grid.major = element_line(color = "#E4D8CC", linewidth = 0.35),
+      plot.background = element_rect(fill = "#EFEBCE", color = NA),
+      panel.background = element_rect(fill = "#EFEBCE", color = NA),
+      panel.grid.major = element_line(color = "#D7CE93", linewidth = 0.35),
       panel.grid.minor = element_blank(),
       plot.title = element_text(color = "#362B26", face = "bold"),
       axis.title = element_text(color = "#362B26"),
@@ -124,7 +124,7 @@ set.seed(42)
 ggplot(foo, aes(label = Aspects, size = log(n), color= log(n))) +
   geom_text_wordcloud() +
   scale_size_area(max_size = 10) +
-  scale_color_gradient(low = "#C75146", high = "#70B4A3") +  # Dégradé de vert
+  scale_color_gradient(low = "#BB8487", high = "#A3A381") +  # Dégradé de vert
   theme_minimal()+labs(caption="Size are log proportionnal to frequencies >5 ")
 
 
@@ -175,15 +175,15 @@ ggplot(df2, aes(y=sentiment_score, x = sentiment))+
     geom = "point",     # Affiche un point
     shape = 18,         # Forme du point (18 = losange)
     size = 4,           # Taille du point
-    color = "#BA443C",      # Couleur des points
-    fill = "#BA443C"        # Remplissage des points
+    color = "#BB8487",      # Couleur des points
+    fill = "#BB8487"        # Remplissage des points
   ) +
   # Ajouter une ligne connectant les moyennes
   stat_summary(
     fun = mean,          # Calcule la moyenne
     geom = "line",       # Trace une ligne
     group = 1,          # Connecte tous les points
-    color = "#BA443C",       # Couleur de la ligne
+    color = "#BB8487",       # Couleur de la ligne
     linewidth = 0.8     # Épaisseur de la ligne
   ) +
   # Améliorer la lisibilité
