@@ -115,3 +115,14 @@ Règles obligatoires lorsque ce skill est appliqué:
 - Les artefacts `results_*` et dérivés dans `data/` ne doivent jamais être versionnés.
 - Si un résultat apparaît dans `git status`, ajouter une règle `.gitignore` avant commit.
 - Ne pas pousser de CSV de résultats en LFS; garder uniquement les sources/statiques explicitement approuvées.
+
+## Skill Spatial Cartography
+Pour standardiser les cartes spatiales Paris Airbnb (choroplèthes, KDE densité, KDE prix), utiliser le skill local:
+- Fichier: `.github/skills/spatial-cartography/SKILL.md`
+
+Règles obligatoires lorsque ce skill est appliqué:
+- Utiliser `data/map/arrondissements.zip` comme couche de référence locale.
+- Projeter points et polygones en `EPSG:2154` avant toute mesure surfacique ou KDE.
+- Masquer strictement les surfaces interpolées aux limites de Paris.
+- Pour les cartes de prix, calculer le **prix moyen local par appartement** et non une somme locale.
+- Utiliser des contours d'arrondissements gris et des exports PNG/CSV dans `data/`.
