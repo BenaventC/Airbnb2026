@@ -138,7 +138,7 @@ ggsave(
 
 ```
 
-![](combined_histograms.jpeg)
+![](Images/combined_histograms.jpeg)
 
 ------------------------------------------------------------------------
 

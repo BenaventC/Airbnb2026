@@ -183,12 +183,12 @@ plt.show()
 ```
 
 ## Export Rules
-- Save figure outputs in `data/` with explicit names tied to the notebook/script section.
+- Save figure outputs in `Images/` with explicit names tied to the notebook/script section.
 - Save derived arrondissement summaries in `data/` as UTF-8 CSV.
 - Keep naming stable and descriptive, for example:
   - `data/P00c_density_by_arrondissement.csv`
-  - `data/P00c_paris_density2d_contourf_clean_per_hectare.png`
-  - `data/P00c_paris_price2d_contourf_clean_per_hectare.png`
+  - `Images/P00c_paris_density2d_contourf_clean_per_hectare.png`
+  - `Images/P00c_paris_price2d_contourf_clean_per_hectare.png`
 
 ## Notebook And Script Integration Rules
 - Add a markdown section immediately before any new mapping code cell.
