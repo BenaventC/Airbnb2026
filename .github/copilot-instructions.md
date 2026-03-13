@@ -70,16 +70,27 @@ Tous les scripts de traitement **doivent**:
 - **Chaque section (notebook/script) possède une cellule markdown explicative** décrivant son objectif (2-3 phrases simples) immédiatement sous le titre.
 - **GPU/CPU branching configuré** avec détection et fallback CPU implanté (si applicable au script).
 
+## Skill Color Palette Management
+Pour appliquer et maintenir la palette de référence du projet dans tous les notebooks, scripts R et diagrammes Mermaid, utiliser le skill local:
+- Fichier: `.github/skills/color-palette-management/SKILL.md`
+
+Règles obligatoires lorsque ce skill est appliqué:
+- Palette de référence: `#A3A381` / `#D7CE93` / `#EFEBCE` / `#D8A48F` / `#BB8487`
+- Tout nouveau notebook Python doit initialiser `PALETTE`, `BG_COLOR`, `GRID_COLOR`, `EDGE_COLOR` et les passer à `rcParams` + `sns.set_theme`.
+- Tout nouveau script R doit déclarer `pal_b <- c("#A3A381", "#D7CE93", "#EFEBCE", "#D8A48F", "#BB8487")`.
+- Les diagrammes Mermaid doivent utiliser le bloc `themeVariables` + styles `Input/Process/Output` définis dans le skill.
+- Ne jamais introduire de nouvelles couleurs sans les mapper à la palette de référence.
+
 ## Skill Mermaid (Pipeline)
 Pour les diagrammes Mermaid de pipeline, utiliser le skill local:
 - Fichier: `.github/skills/mermaid-pipeline/SKILL.md`
 
 Règles obligatoires pour les prochains diagrammes:
-- Fond blanc + couleurs pastel claires.
-- 3 blocs principaux: `DATA INPUTS` (bleu), `INTERNAL PROCESSING` (jaune), `OUTPUTS` (vert).
+- Fond crème `#EFEBCE` + blocs pastel chauds (palette de référence du projet).
+- 3 blocs principaux: `DATA INPUTS` (beige doré), `INTERNAL PROCESSING` (crème), `OUTPUTS` (terracotta).
 - Blocs principaux alignés horizontalement (gauche vers droite).
 - Boites internes empilees verticalement dans chaque bloc.
-- Fleches claires (gris clair), labels courts orientés action.
+- Flèches terracotta `#D8A48F`, labels courts orientés action.
 
 ## Skill English Notebook Style
 Pour la traduction et réécriture en anglais des cellules texte de notebook, utiliser le skill local:

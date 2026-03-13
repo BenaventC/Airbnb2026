@@ -18,24 +18,23 @@ Generate consistent Mermaid pipeline diagrams for notebooks/scripts with a clean
 4. Nodes inside each block should be arranged vertically (`direction TB`).
 
 ## Required Visual Style
-- Background must stay white.
-- Use pastel fills and soft borders.
-- Use light arrows.
-- Keep labels short and action-oriented.
+- Utiliser la **palette de référence du projet** (voir `.github/skills/color-palette-management/SKILL.md`).
+- Fond crème `#EFEBCE`, blocs pastel chauds, flèches terracotta.
+- Labels courts orientés action.
 
 ### Base Mermaid init to reuse
 ```mermaid
-%%{init: {'theme': 'base', 'flowchart': { 'nodeSpacing': 18, 'rankSpacing': 20, 'diagramPadding': 6 }, 'themeVariables': { 'primaryColor': '#ffffff', 'primaryBorderColor': '#d9d9d9', 'background': '#ffffff', 'mainBkg': '#ffffff', 'clusterBkg': '#ffffff', 'lineColor': '#cfd8dc', 'edgeLabelBackground':'#ffffff'}} }%%
+%%{init: {'theme': 'base', 'flowchart': { 'nodeSpacing': 18, 'rankSpacing': 20, 'diagramPadding': 6 }, 'themeVariables': { 'primaryColor': '#EFEBCE', 'primaryBorderColor': '#D8A48F', 'background': '#EFEBCE', 'mainBkg': '#EFEBCE', 'clusterBkg': '#EFEBCE', 'lineColor': '#D8A48F', 'edgeLabelBackground':'#EFEBCE'}} }%%
 ```
 
 ### Group colors
-- Input group: `fill:#E8F4F8, stroke:#B0D4E3`
-- Process group: `fill:#FFF9E6, stroke:#FFE082`
-- Output group: `fill:#E8F5E9, stroke:#A5D6A7`
+- Input group: `fill:#D7CE93, stroke:#A3A381, color:#3E3A33`
+- Process group: `fill:#EFEBCE, stroke:#D7CE93, color:#3E3A33`
+- Output group: `fill:#D8A48F, stroke:#BB8487, color:#3E3A33`
 
 ### Arrow style
 ```mermaid
-linkStyle default stroke:#cfd8dc,stroke-width:2px,color:#90a4ae
+linkStyle default stroke:#D8A48F,stroke-width:2px,color:#BB8487
 ```
 
 ## Recommended Node Text Pattern
@@ -80,9 +79,9 @@ flowchart LR
   B -->|Join| E
   E -->|Export| F
 
-  style Row fill:#ffffff,stroke:#ffffff,color:#ffffff
-  linkStyle default stroke:#cfd8dc,stroke-width:2px,color:#90a4ae
-  style Input fill:#E8F4F8,stroke:#B0D4E3,stroke-width:3px,color:#0d47a1
-  style Process fill:#FFF9E6,stroke:#FFE082,stroke-width:3px,color:#F57F17
-  style Output fill:#E8F5E9,stroke:#A5D6A7,stroke-width:3px,color:#1B5E20
+  style Row fill:#EFEBCE,stroke:#EFEBCE,color:#EFEBCE
+  linkStyle default stroke:#D8A48F,stroke-width:2px,color:#BB8487
+  style Input fill:#D7CE93,stroke:#A3A381,stroke-width:3px,color:#3E3A33
+  style Process fill:#EFEBCE,stroke:#D7CE93,stroke-width:3px,color:#3E3A33
+  style Output fill:#D8A48F,stroke:#BB8487,stroke-width:3px,color:#3E3A33
 ```
