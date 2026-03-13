@@ -16,6 +16,13 @@ The report must use one fixed schema and remain consistent over time.
 - Encoding: `utf-8`
 - One row appended per execution.
 
+## Required Derived Table
+- Keep `data/carbon_hourly_summary.csv` synchronized after each execution.
+- This table is derived from the unified report by grouping `total eco2 en grammes` by hourly bucket.
+- Export columns:
+    1. `hour_bucket`
+    2. `total eco2 en grammes`
+
 ## Required Column Schema (exact names)
 1. `nom du script execute`
 2. `nombre d'observations traitees`
@@ -46,10 +53,15 @@ Do not rename these columns.
 2. Build a one-row DataFrame with exact required columns and ordering.
 3. Append this row to `data/carbon_emissions_report.csv`.
 4. If file exists with wrong schema, rewrite file using only the required schema before continuing.
-5. Print a concise synthesis table using the same column names.
+5. Recompute and overwrite `data/carbon_hourly_summary.csv` from the updated unified report.
+6. Print a concise synthesis table using the same column names.
 
 ## Notebook/Script Display Requirement
 At end of execution, print a synthesis table with the exact same six columns as the CSV.
+
+Also print the destination paths of:
+- `data/carbon_emissions_report.csv`
+- `data/carbon_hourly_summary.csv`
 
 ## Robustness Rules
 - Never use absolute paths.
@@ -99,6 +111,23 @@ else:
     final_df = row_df.copy()
 
 final_df.to_csv(report_path, index=False, encoding='utf-8')
+
+# Refresh hourly summary used by the dashboard notebook.
+hourly_df = final_df.copy()
+hourly_df["date d'execution"] = pd.to_datetime(hourly_df["date d'execution"], errors='coerce')
+hourly_df['total eco2 en grammes'] = pd.to_numeric(hourly_df['total eco2 en grammes'], errors='coerce')
+hourly_df = hourly_df.dropna(subset=["date d'execution", 'total eco2 en grammes'])
+
+if not hourly_df.empty:
+    hourly_df['hour_bucket'] = hourly_df["date d'execution"].dt.strftime('%Y-%m-%d %H:00')
+    hourly_summary = (
+        hourly_df.groupby('hour_bucket', as_index=False)['total eco2 en grammes']
+        .sum()
+        .sort_values('hour_bucket')
+    )
+    hourly_path = os.path.join('data', 'carbon_hourly_summary.csv')
+    hourly_summary.to_csv(hourly_path, index=False, encoding='utf-8')
+
 print(row_df.to_string(index=False))
 ```
 
@@ -107,3 +136,4 @@ print(row_df.to_string(index=False))
 - Confirm exact column names and order in CSV.
 - Confirm synthesis print matches CSV schema.
 - Confirm no additional carbon CSV is created.
+- Confirm `data/carbon_hourly_summary.csv` is refreshed after each run.
