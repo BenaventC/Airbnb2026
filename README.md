@@ -1,4 +1,4 @@
-# Airbnb2026
+﻿# Airbnb2026
 
 This repository contains experiments developed with [Master AISO](https://psl.eu/formation/master-intelligence-artificielle-et-societe) students in an applied teaching context. Airbnb corpora are explored, with Paris used as the reference dataset and extensions to other cities explored by students.
 
@@ -21,17 +21,42 @@ The project embodies a symbolist spirit: when things correspond, Large Language 
 
 ## Python codes
 
-| Notebook | Purpose | Output |
-|----------|---------|--------|
-| **p00** [Reviews Data Preparation](p00_prepare_data.ipynb) | Last-year filtering, comment cleaning (`<br/>` replacement), `id` standardization, language detection, listing enrichment | `data/reviews_prepared.csv` (review-level enriched dataset) |
-| **P00c** [Price Distribution Analysis](P00c_price_distribution_analysis.ipynb) | IQR outlier filtering, price distribution & cumulative rental value, comparison boxplots by listing type / capacity / neighbourhood, choropleth map of mean prices by arrondissement (local shapefiles) | `data/P00c_listings_prices_cleaned.csv`, `data/P00c_mean_price_by_arrondissement.csv`, distribution & map PNGs |
-| **p01** [Syntactic Dependency](p01_syntactic_dependency_analysis.ipynb) | Multilingual POS tagging & dependency parsing (6 languages, GPU-accelerated) | Token annotations (CoNLL-U format) |
-| **p02** [AMOD + t-SNE](p02_amod_adj_noun_tsne.ipynb) | Extract adjective-noun relations, semantic clustering | ADJ×NOUN crosstab, t-SNE projection |
-| **p03** [BERT Sentiment](p03_bert_sentiment_analysis.ipynb) | Sentiment classification (multi-label) | Sentiment scores per review |
-| **p04** [LDA Topics](p04_lda_topic_modeling.ipynb) | Multilingual topic modeling (8 languages) | Topic distributions, phi/theta matrices |
-| **Gender, ABSA, Age** | Supporting notebooks (gender from names, aspect extraction, age estimation with comment-aware prompts, GPU/CPU fallback, unified carbon logging) | Classifier outputs, aspect scores, inferred ages |
-| **p08-p09** [Aspect + ABSA](p08_aspects_gemma3_7b.ipynb) | Aspect extraction & ABSA using Ollama Gemma3 | Aspects, sentiments, probabilities |
-| **p10** [Carbon Hourly Dashboard](p10_carbon_hourly_bar_report.ipynb) | Aggregate unified carbon logs and visualize total eCO2 by execution hour | `data/carbon_hourly_summary.csv` + hourly bar chart |
+### 1. Data Preparation and Foundation
+- **p01** [Reviews Data Preparation](p01_prepare_data.ipynb)
+  Last-year filtering, comment cleaning (`<br/>` replacement), `id` standardization, language detection, and listing enrichment.
+  Output: `data/reviews_prepared.csv` (review-level enriched dataset).
+
+### 2. Descriptive and Spatial Analysis
+- **P12** [Price Distribution Analysis](P12_price_distribution_analysis.ipynb)
+  IQR outlier filtering, price distribution and cumulative rental value, boxplots by listing type/capacity/neighbourhood, and arrondissement-level choropleth (local shapefiles).
+  Outputs: `data/P00c_listings_prices_cleaned.csv`, `data/P00c_mean_price_by_arrondissement.csv`, and distribution/map PNGs.
+
+### 3. Linguistic Structure and Semantics
+- **p05** [Syntactic Dependency](p05_syntactic_dependency_analysis.ipynb)
+  Multilingual POS tagging and dependency parsing (6 languages, GPU-accelerated).
+  Output: token annotations (CoNLL-U format).
+- **p06** [AMOD + t-SNE](p06_amod_adj_noun_tsne.ipynb)
+  Adjective-noun relation extraction and semantic clustering.
+  Outputs: ADJxNOUN crosstab and t-SNE projection.
+
+### 4. Sentiment, Topics, and ABSA
+- **p03** [BERT Sentiment](p03_bert_sentiment_analysis.ipynb)
+  Multi-label sentiment classification.
+  Output: sentiment scores per review.
+- **p04** [LDA Topics](p04_lda_topic_modeling.ipynb)
+  Multilingual topic modeling (8 languages).
+  Outputs: topic distributions and phi/theta matrices.
+- **p08-p09** [Aspect + ABSA](p08_aspects_gemma3_7b.ipynb)
+  Aspect extraction and ABSA with Ollama Gemma3.
+  Outputs: aspects, sentiments, and probabilities.
+
+### 5. Demographic Inference and Carbon Tracking
+- **Gender / Age notebooks**
+  Supporting notebooks for gender-from-name inference and comment-aware age estimation with GPU/CPU fallback.
+  Outputs: classifier outputs and inferred ages.
+- **p15** [Carbon Hourly Dashboard](p15_carbon_hourly_bar_report.ipynb)
+  Aggregates unified carbon logs and visualizes total eCO2 by execution hour.
+  Output: `data/carbon_hourly_summary.csv` and hourly bar chart.
 
 ## Quarto Reports
 - [script00_listing.qmd](script00_listing.qmd) – Corpus description & statistics
@@ -63,7 +88,7 @@ Both skills are documented in:
 
 All scripts follow reproducible NLP pipeline principles with energy tracking:
 
-1. **Naming & I/O**: Scripts prefixed `pXX_` (e.g., `p01_syntactic_dependency_analysis.ipynb`). All data flows through `data/` folder.
+1. **Naming & I/O**: Scripts prefixed `pXX_` (e.g., `p05_syntactic_dependency_analysis.ipynb`). All data flows through `data/` folder.
 2. **Sample parameter**: Every script must accept `Sample_Size` (int or `"total"`).
 3. **Progress tracking**: Use `tqdm` for loops >30s; print `(runtime sec, energy Wh, CO2 gCO2e, end timestamp)`.
 4. **GPU/CPU**: Auto-detect CUDA devices; assign tasks to ≤4 GPU workers; fallback CPU if none available.
@@ -98,3 +123,4 @@ VS Code interpreter: `${workspaceFolder}\.venv\Scripts\python.exe`
 - **Validation**: Runs on `Sample_Size=5`; stable CSV columns; documented CI/CD friendly
 
 See [.github/copilot-instructions.md](.github/copilot-instructions.md) for full detailed specifications.
+

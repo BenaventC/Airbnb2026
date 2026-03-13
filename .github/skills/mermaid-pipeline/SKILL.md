@@ -19,12 +19,12 @@ Generate consistent Mermaid pipeline diagrams for notebooks/scripts with a clean
 
 ## Required Visual Style
 - Utiliser la **palette de référence du projet** (voir `.github/skills/color-palette-management/SKILL.md`).
-- Fond crème `#EFEBCE`, blocs pastel chauds, flèches terracotta.
+- Fond blanc `#ffffff`, blocs pastel chauds, flèches terracotta.
 - Labels courts orientés action.
 
 ### Base Mermaid init to reuse
 ```mermaid
-%%{init: {'theme': 'base', 'flowchart': { 'nodeSpacing': 18, 'rankSpacing': 20, 'diagramPadding': 6 }, 'themeVariables': { 'primaryColor': '#EFEBCE', 'primaryBorderColor': '#D8A48F', 'background': '#EFEBCE', 'mainBkg': '#EFEBCE', 'clusterBkg': '#EFEBCE', 'lineColor': '#D8A48F', 'edgeLabelBackground':'#EFEBCE'}} }%%
+%%{init: {'theme': 'base', 'flowchart': { 'nodeSpacing': 18, 'rankSpacing': 20, 'diagramPadding': 6 }, 'themeVariables': { 'primaryColor': '#ffffff', 'primaryBorderColor': '#D8A48F', 'background': '#ffffff', 'mainBkg': '#ffffff', 'clusterBkg': '#ffffff', 'lineColor': '#D8A48F', 'edgeLabelBackground':'#ffffff'}} }%%
 ```
 
 ### Group colors
@@ -79,7 +79,7 @@ flowchart LR
   B -->|Join| E
   E -->|Export| F
 
-  style Row fill:#EFEBCE,stroke:#EFEBCE,color:#EFEBCE
+  style Row fill:#ffffff,stroke:#ffffff,color:#ffffff
   linkStyle default stroke:#D8A48F,stroke-width:2px,color:#BB8487
   style Input fill:#D7CE93,stroke:#A3A381,stroke-width:3px,color:#3E3A33
   style Process fill:#EFEBCE,stroke:#D7CE93,stroke-width:3px,color:#3E3A33

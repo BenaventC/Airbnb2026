@@ -1,4 +1,4 @@
-# Skill: règles générales de structure de code (AirBnB_NLP4socialscience)
+﻿# Skill: règles générales de structure de code (AirBnB_NLP4socialscience)
 
 ## Objectif
 Ce dépôt suit un pipeline NLP reproductible pour les reviews Airbnb:
@@ -39,7 +39,7 @@ Chaque section doit inclure une **cellule markdown explicative** décrivant son 
 - Paramètres minimaux: `model`, `prompt`, `stream=False`, `temperature`
 - Gérer les erreurs réseau/JSON proprement et retourner une sortie vide plutôt qu’interrompre tout le run.
 ## Standards GPU et Parallélisation
-**Pattern inspiré de p01_syntactic_dependency_analysis.ipynb**
+**Pattern inspiré de p05_syntactic_dependency_analysis.ipynb**
 
 Tous les scripts de traitement **doivent**:
 1. **Détecter les GPUs disponibles** via `torch.cuda.device_count()` ou `nvidia-smi` (fallback):
@@ -86,7 +86,7 @@ Pour les diagrammes Mermaid de pipeline, utiliser le skill local:
 - Fichier: `.github/skills/mermaid-pipeline/SKILL.md`
 
 Règles obligatoires pour les prochains diagrammes:
-- Fond crème `#EFEBCE` + blocs pastel chauds (palette de référence du projet).
+- Fond blanc `#ffffff` + blocs pastel chauds (palette de référence du projet).
 - 3 blocs principaux: `DATA INPUTS` (beige doré), `INTERNAL PROCESSING` (crème), `OUTPUTS` (terracotta).
 - Blocs principaux alignés horizontalement (gauche vers droite).
 - Boites internes empilees verticalement dans chaque bloc.
