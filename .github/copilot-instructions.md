@@ -106,3 +106,12 @@ Règles obligatoires lorsque ce skill est appliqué:
    - `temps d'execution`
    - `total KWatt/heure`
    - `total eco2 en grammes`
+
+## Skill Git Main Hygiene
+Pour éviter que des fichiers de résultats générés soient committés sur `main`, utiliser le skill local:
+- Fichier: `.github/skills/git-main-hygiene/SKILL.md`
+
+Règles obligatoires lorsque ce skill est appliqué:
+- Les artefacts `results_*` et dérivés dans `data/` ne doivent jamais être versionnés.
+- Si un résultat apparaît dans `git status`, ajouter une règle `.gitignore` avant commit.
+- Ne pas pousser de CSV de résultats en LFS; garder uniquement les sources/statiques explicitement approuvées.

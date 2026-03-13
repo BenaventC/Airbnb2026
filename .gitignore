@@ -46,11 +46,13 @@ data/**
 
 # Exceptions explicitly requested
 !data/reviews_select.csv
-!data/results_*.csv
-!results_*.csv
 
-# Too large for GitHub LFS (> 2 GB limit) — kept locally only
-data/results_reviews_annotations.csv
+# Generated result artifacts must never be committed on main
+results_*.csv
+data/results_*.csv
+data/*_summary*.csv
+data/*_per_review*.csv
+data/*_annotations*.csv
 
 # Keep only lightweight/public metadata in data (if needed)
 !data/.gitkeep
