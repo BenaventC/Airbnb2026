@@ -27,8 +27,12 @@ jobs:
           # Switch to AIrnb2026 branch
           git checkout AIrnb2026
 
-          # Merge main into AIrnb2026
-          git merge origin/main --no-edit -m "chore: sync AIrnb2026 with main"
+          # Merge main into AIrnb2026 (fail clearly on conflicts for manual resolution)
+          git merge origin/main -m "chore: sync AIrnb2026 with main" || {
+            echo "::error::Merge conflict detected. Manual resolution required."
+            git merge --abort
+            exit 1
+          }
 
           # Push the updated branch
           git push origin AIrnb2026
