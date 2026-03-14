@@ -8,12 +8,7 @@ Ce dépôt suit un pipeline NLP reproductible pour les reviews Airbnb:
 4. export CSV + métriques runtime/énergie/eCO2.
 
 ## Règles globales
-- Préférer des scripts Python nommés avec préfixe `pXX_` (ex: `p02_aspects_gemma3_7b.py`).
-- Conserver les entrées/sorties dans `data/`.
-- Ne pas hardcoder de chemins absolus.
-- Toujours garder une option `--sample-size` (int ou `total`).
-- Ajouter une barre de progression pour les boucles longues (`tqdm` si disponible, fallback sinon).
-- Afficher en fin de run: durée, Wh, gCO2e.
+ - Toujours conserver les identifiants uniques (id_review, id, etc.) dans les exports et outputs pour assurer la traçabilité des résultats.
 
 ## Structure recommandée d’un script pipeline
 Chaque section doit inclure une **cellule markdown explicative** décrivant son objectif avant l'implémentation:
