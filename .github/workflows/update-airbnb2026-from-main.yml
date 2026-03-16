@@ -1,0 +1,38 @@
+name: Update AIrnb2026 from main
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  update-branch:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Merge main into AIrnb2026
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          # Switch to AIrnb2026 branch
+          git checkout AIrnb2026
+
+          # Merge main into AIrnb2026 (fail clearly on conflicts for manual resolution)
+          git merge origin/main -m "chore: sync AIrnb2026 with main" || {
+            echo "::error::Merge conflict detected. Manual resolution required."
+            git merge --abort
+            exit 1
+          }
+
+          # Push the updated branch
+          git push origin AIrnb2026
