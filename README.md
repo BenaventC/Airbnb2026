@@ -53,10 +53,13 @@ The project embodies a symbolist spirit: when things correspond, Large Language 
   Aspect extraction and ABSA with Ollama Gemma3.
   Outputs: aspects, sentiments, and probabilities.
 
-### 5. Demographic Inference and Carbon Tracking
+
+### 5. Demographic Inference, Cognition/Affect Detection, and Carbon Tracking
 - **Gender / Age notebooks**
   Supporting notebooks for gender-from-name inference and comment-aware age estimation with GPU/CPU fallback.
   Outputs: classifier outputs and inferred ages.
+- **p10** [Cognition & Affect Detection](p10_cognition_affect_detection.ipynb)
+  Unified pipeline for extracting cognition and affectivity scores from Airbnb reviews using local LLMs (Gemma3, Mistral) and multiple prompt templates. Includes robust data filtering, parallelized extraction, cross-prompt/model correlation analysis, PCA factor analysis with correlation circles, and unified carbon emissions reporting. Outputs: per-review cognition/affect scores, pivot tables, scientific correlation matrix (PNG/LaTeX), and carbon report row.
 - **p15** [Carbon Hourly Dashboard](p15_carbon_hourly_bar_report.ipynb)
   Aggregates unified carbon logs and visualizes total eCO2 by execution hour.
   Output: `data/carbon_hourly_summary.csv` and hourly bar chart.
