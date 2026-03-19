@@ -43,11 +43,6 @@ Images/P12b_arrondissement_share_accommodates_gt_4_map.png
 *.feather
 *.pkl
 
-# Strict research mode: ignore data payloads
-data/**
-
-# Exceptions explicitly requested
-!data/reviews_select.csv
 
 # Generated result artifacts must never be committed on main
 results_*.csv
@@ -55,6 +50,12 @@ data/results_*.csv
 data/*_summary*.csv
 data/*_per_review*.csv
 data/*_annotations*.csv
+
+# Strict research mode: ignore data payloads
+data/**
+
+# Exceptions explicitly requested
+!data/reviews_select.csv
 
 # Keep only lightweight/public metadata in data (if needed)
 !data/.gitkeep
