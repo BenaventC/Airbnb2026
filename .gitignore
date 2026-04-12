@@ -32,8 +32,21 @@ script00_files/
 script_listings_files/
 script00_listing_files/
 *.tex
+Untitled-*.ipynb
+
+# Generated notebook figures
+Images/P00c_*.png
+Images/P01b_*.png
+Images/barplot_mean_*.jpeg
+Images/bivariate_*.jpeg
+Images/mean_scores_*.jpeg
+Images/moyenne_cognition_expressivite_par_langue*.png
+Images/pca_correlation_circle_*.jpeg
+Images/scatter_*.jpeg
+Images/acp12.png
 Images/P12b_arrondissement_mean_price_map.png
 Images/P12b_arrondissement_share_accommodates_gt_4_map.png
+Images/P12b_arrondissement_listing_summary.png
 
 # Large binary/data artifacts often better out of git
 *.pdf
