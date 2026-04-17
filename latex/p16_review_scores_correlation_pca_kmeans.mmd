@@ -1,0 +1,38 @@
+%%{init: {'theme': 'base', 'flowchart': { 'nodeSpacing': 18, 'rankSpacing': 20, 'diagramPadding': 6 }, 'themeVariables': { 'primaryColor': '#ffffff', 'primaryBorderColor': '#D8A48F', 'background': '#ffffff', 'mainBkg': '#ffffff', 'clusterBkg': '#ffffff', 'lineColor': '#D8A48F', 'edgeLabelBackground':'#ffffff'}} }%%
+flowchart LR
+  subgraph Row[" "]
+    direction LR
+
+    subgraph Input["DATA INPUTS"]
+      direction TB
+      A["Load Listings"]
+      B["Select Review Scores"]
+      A --- B
+    end
+
+    subgraph Process["INTERNAL PROCESSING"]
+      direction TB
+      C["Compute Correlations"]
+      D["Fit PCA"]
+      E["Run K-Means"]
+      C --> D --> E
+    end
+
+    subgraph Output["OUTPUTS"]
+      direction TB
+      F["Export Figures"]
+      G["Export CSV and LaTeX"]
+      F --> G
+    end
+  end
+
+  A -->|Read| C
+  B -->|Analyze| D
+  E -->|Save| F
+  E -->|Report| G
+
+  style Row fill:#ffffff,stroke:#ffffff,color:#ffffff
+  linkStyle default stroke:#D8A48F,stroke-width:2px,color:#BB8487
+  style Input fill:#D7CE93,stroke:#A3A381,stroke-width:3px,color:#3E3A33
+  style Process fill:#EFEBCE,stroke:#D7CE93,stroke-width:3px,color:#3E3A33
+  style Output fill:#D8A48F,stroke:#BB8487,stroke-width:3px,color:#3E3A33

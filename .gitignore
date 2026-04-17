@@ -24,6 +24,9 @@ tmpclaude-*
 .RDataTmp
 .RData.tmp
 *.log
+*.aux
+*.out
+*.toc
 nul
 NUL
 
@@ -31,7 +34,6 @@ NUL
 script00_files/
 script_listings_files/
 script00_listing_files/
-*.tex
 Untitled-*.ipynb
 
 # Generated notebook figures
@@ -55,6 +57,7 @@ Images/P12b_arrondissement_listing_summary.png
 *.parquet
 *.feather
 *.pkl
+
 
 
 # Generated result artifacts must never be committed on main
